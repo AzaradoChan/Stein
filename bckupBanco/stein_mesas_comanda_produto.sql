@@ -1,0 +1,61 @@
+CREATE DATABASE  IF NOT EXISTS `stein` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `stein`;
+-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: stein
+-- ------------------------------------------------------
+-- Server version	8.0.30
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `mesas_comanda_produto`
+--
+
+DROP TABLE IF EXISTS `mesas_comanda_produto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mesas_comanda_produto` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `comanda_id` bigint NOT NULL,
+  `produto_id` bigint NOT NULL,
+  `quantidade` int NOT NULL,
+  `quantidadeEntregue` int NOT NULL,
+  `horaPedido` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mesas_comanda_produto_comanda_id_6565c6c2_fk_mesas_comanda_id` (`comanda_id`),
+  KEY `mesas_comanda_produto_produto_id_192c8193_fk_estoque_produto_id` (`produto_id`),
+  CONSTRAINT `mesas_comanda_produto_comanda_id_6565c6c2_fk_mesas_comanda_id` FOREIGN KEY (`comanda_id`) REFERENCES `mesas_comanda` (`id`),
+  CONSTRAINT `mesas_comanda_produto_produto_id_192c8193_fk_estoque_produto_id` FOREIGN KEY (`produto_id`) REFERENCES `estoque_produto` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mesas_comanda_produto`
+--
+
+LOCK TABLES `mesas_comanda_produto` WRITE;
+/*!40000 ALTER TABLE `mesas_comanda_produto` DISABLE KEYS */;
+INSERT INTO `mesas_comanda_produto` VALUES (184,132,4,1,0,'2022-11-02 03:58:32.165370'),(185,133,4,1,1,'2022-11-02 04:07:27.654963'),(186,134,4,2,2,'2022-11-04 01:57:03.603554'),(187,134,3,1,1,'2022-11-04 01:57:03.606575'),(188,135,12,2,2,'2022-11-05 15:12:27.599985'),(191,137,9,3,3,'2022-11-05 16:07:46.063587'),(192,137,10,1,1,'2022-11-05 16:07:46.068603'),(193,137,4,2,2,'2022-11-05 16:34:27.869581'),(194,138,4,1,0,'2022-11-05 16:42:14.135435'),(195,139,4,2,2,'2022-11-05 16:48:54.500705'),(196,140,4,4,4,'2022-11-06 00:56:17.776258'),(197,141,4,2,0,'2022-11-06 01:37:45.032012'),(199,143,5,2,2,'2022-11-09 15:58:16.145400'),(200,143,17,5,5,'2022-11-09 15:58:16.150072'),(201,143,6,2,2,'2022-11-09 15:58:16.154067'),(202,143,13,1,1,'2022-11-09 15:58:16.157057'),(203,144,4,2,1,'2022-11-09 16:00:09.129466'),(204,144,9,2,2,'2022-11-09 16:00:09.133459'),(205,144,17,2,0,'2022-11-09 16:00:09.137304'),(206,144,18,3,3,'2022-11-09 16:00:09.139803'),(207,144,6,2,1,'2022-11-09 16:00:09.141801'),(208,144,8,2,2,'2022-11-09 16:00:09.144798'),(210,145,9,2,1,'2022-11-09 16:03:15.162563'),(211,145,12,1,1,'2022-11-09 16:03:15.165111'),(212,146,33,2,2,'2022-11-09 16:08:21.865321'),(213,146,10,1,0,'2022-11-09 16:08:21.868106'),(214,146,8,1,0,'2022-11-09 16:08:21.871122'),(215,147,9,1,0,'2022-11-16 23:43:09.951875'),(216,147,10,1,0,'2022-11-16 23:43:09.955864'),(217,147,12,2,0,'2022-11-16 23:43:09.958857');
+/*!40000 ALTER TABLE `mesas_comanda_produto` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-11-16 23:48:18

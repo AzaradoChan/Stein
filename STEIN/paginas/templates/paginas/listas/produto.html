@@ -1,0 +1,109 @@
+{% extends 'paginas/modelo.html' %}
+{% load static %}
+
+{% block titulo %}
+Lista de Produtos
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="table mt-3 text-center">
+    <table class="table">
+        <tr>
+            <td>
+                <h3>Listagem de todos os produtos registrados.</h3>
+            </td>
+            {% if not request.user.is_anonymous %}
+                <td>
+                    <a href="{% url 'cad-produto' %}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    </a>
+                </td>
+            {% endif %}
+        </tr>
+    </table>
+    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false">
+        <div class="row">
+            {% for tipo in object_list.1 %}
+                <button type="button" data-bs-target="#carouselProdutos" 
+                        data-bs-slide-to={{forloop.counter|add:'-1'}} 
+                        class="col btn btn-sm mb-2 botTipo" 
+                        aria-current="true" aria-label="Slide {{forloop.counter}}" 
+                        style="border: 1px solid gray; margin-right: 5px;"
+                        id="tipo{{tipo.pk}}"
+                        onclick="$('.botTipo').removeClass('btn-primary');$('#tipo{{tipo.pk}}').addClass('btn-primary');">
+                        {{tipo.tipo}}
+                </button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for tipo in object_list.1 %}
+                {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+                {% else %}
+                    <div class="carousel-item mt-3">
+                {%endif%}
+                        {% for produto in object_list.0 %}
+                            {% if produto.tipoProduto == tipo %}
+                            <div class="row mb-2 align-items-center d-flex" id="card{{produto.pk}}"
+                                 style="margin-left: 2%; margin-right: 2%; border: 5px solid {% if produto.vendendo %} green {% else %} red {% endif %}; border-radius: 25px;" >
+                                <div class="col-sm-3">
+                                    {% if produto.imagem %}
+                                        <img src="{{produto.imagem.url}}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+                                    {% else %}
+                                        <img src="{% static 'img/semIMG.png' %}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+                                    {% endif %}
+                                </div>
+                                <div class="col mt-1">
+                                    <h3>{{produto.nome}}</h3>
+                                    {% if produto.descricao %}
+                                        {{produto.descricao}}
+                                    {% else %}
+                                        O produto não possui descrição.
+                                    {% endif %}
+                                    <br>
+                                    R${{produto.preco}} cada
+                                </div>
+                                <div class="col-sm-2 mb-2" style="margin-right: 2%;">
+                                    <div class="row mb-4 mt-3">
+                                        <div class="col-sm-1">
+                                        </div>
+                                        <div class="col">
+                                            {% if perms.estoque.change_produto %}
+                                            <a href="{% url 'edit-produto' produto.pk %}">
+                                                <button type="button" class="btn btn-primary btn-lg" >
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    Editar
+                                                </button>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm-1">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                        </div>
+                                        <div class="col">
+                                            {% if perms.estoque.delete_produto %}
+                                            <a href="{% url 'del-produto' produto.pk %}">
+                                                <button type="button" class="btn btn-danger btn-lg">
+                                                    <i class="fa fa-close" aria-hidden="true"></i>
+                                                    Excluir
+                                                </button>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm-1">
+                                        </div>
+                                    </div>
+                                </div>                                    
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

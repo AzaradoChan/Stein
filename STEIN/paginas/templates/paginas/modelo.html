@@ -1,0 +1,210 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BOOTSTRAP -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- IMPORTAÇÃO DO AWESOMEFONTS-->
+    <link rel="stylesheet" href="{% static 'fontawesome6/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome6/css/brands.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome6/css/solid.css' %}">
+    <!-- IMPORTAÇÃO DE ARQUIVOS ESTÁTICOS-->
+
+    <!-- ÍCONE -->
+    {% block icone %}
+    <link rel="icon" href="{% static 'img/stein_ico.png' %}">
+    {% endblock %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>
+        {% block titulo %}
+        MODELO
+        {% endblock %}
+    </title>
+    {% block scriptHeader %}
+    {% endblock %}
+    <script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+</head>
+<body>
+    {% block menu %}
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'img/stein_ico.png' %}" 
+                alt="Ícone em formato de cabeça de Frankstein" 
+                width="40px">
+            </a>
+            <button class="navbar-toggler" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" 
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" 
+            aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                             Inicio
+                        </a>
+                    </li>
+
+                    {% if request.user.is_staff %}
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle nav-link" href=""
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                 Colaboradores
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar-funcionario' %}">
+                                         Funcionarios
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar-cargo' %}">
+                                         Cargos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar-setor' %}">
+                                         Setores
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        {% if not request.user.is_anonymous %}
+                        <div class="dropdown">
+                            <a class="dropdown-toggle nav-link" href=""
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-box" aria-hidden="true"></i>
+                                 Produtos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'listar-produto' %}">
+                                         Produtos
+                                    </a>
+                                </li>
+                                <li>
+                                    {% if perms.estoque.view_tipoproduto %}
+                                    <a class="dropdown-item" href="{% url 'listar-tProduto' %}">
+                                         Tipos de Produtos
+                                    </a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'listar-produto' %}">
+                                <i class="fa fa-box" aria-hidden="true"></i>
+                                Produtos
+                            </a>
+                        {% endif %}
+                    </li>
+                        {% if perms.mesas.view_comanda or request.user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'listar-comanda' %}">
+                                    <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                                    Comandas
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if perms.mesas.view_comanda or request.user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'listar-retaguarda' %}">
+                                    <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                                    Comandas/Retaguarda
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% if request.user.is_anonymous %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cad-comanda' %}">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            Fazer Pedido
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <div class="dropdown navbar-nav" style="padding-right: 30px;"  id="usuario">
+
+                    {% if request.user.is_authenticated %}
+                        <a class="dropdown-toggle nav-item nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {% if user.first_name %}
+                                {{user.first_name}}
+                            {% else %}
+                                {{user.username}}
+                            {% endif %}
+                        </a>
+                    
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'sair' %}">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    Sair
+                                </a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{% url 'entrar' %}">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            Logar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>  
+
+        </div>
+    </nav>
+    {% endblock %}
+
+    <div class="content">
+    {% block corpo %}
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col-20">
+            {% block conteudo %}
+
+            {% endblock %}
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <div class="push"></div>
+    </div>
+    {% endblock %}
+    </div>
+
+    {% block rodape %}
+    <footer class="footer bg-dark text-center text-light justify-content-center">
+        <p style="padding-top: 0.85%;">Desenvolvido por Vitor Garcia, Rafael Leonardo e Giovana Garcia.</p>
+    </footer>
+    {% endblock %}
+
+
+    <script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/fontAwesome.js' %}" crossorigin="anonymous"></script>
+    
+    {% block script %}
+
+    {% endblock %}
+</body>
+</html>

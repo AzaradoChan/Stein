@@ -1,0 +1,508 @@
+{% extends 'paginas/modelo.html' %}
+
+{% load static %}
+
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}
+    Comanda
+{% endblock %}
+
+{% block scriptHeader %}
+<script type="text/javascript">
+    function verificarEmail(){
+        campoEmail = $('#email')
+        if (isEmail(campoEmail.val()) != true){
+            campoEmail.attr('style', 'border: 1px solid red;')
+            campoEmail.val('Email Inválido!')
+            return false
+        }else{
+            campoEmail.attr('style', 'border: 1px solid green;')
+            alert('O código foi enviado e deve chegar em instantes.')
+            $('#campoCodigo').html(
+                '<label for="campoCodigo">Insira aqui seu código:</label>'+
+                '<input type="text" id="codeVerify" class="text-center form-control" name="codigoVerfiy" id="codVer">'+
+                '<button type="button" class="mt-2 btn btn-sm btn-secondary" onclick="verifyBackEnd();">Verificar</button>'
+                )
+            return true
+        }
+    }
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+    function atualizaQuantidade(produtoPK, valorProduto, alteracao){
+        campoQtd = $('#qtd'+produtoPK)
+        valQtdProd = 0
+        if (alteracao == '0'){
+            novoValor = parseInt(campoQtd.val())
+        }else{
+            novoValor = parseInt(campoQtd.val()) + parseInt(alteracao)
+        }
+        if (novoValor <= 0 || ''+novoValor == 'NaN'){
+            campoQtd.val('0')
+            $('#total'+produtoPK).html(
+                '<input type="text" hidden name="campoValor" id="valor'+produtoPK+'" value="'+valQtdProd+'">'
+            )
+            $('#valor'+produtoPK).val('0')
+        }else{
+            if (novoValor > 100){
+                novoValor = 100;
+            }
+            campoQtd.val(novoValor)
+            valQtdProd = novoValor*parseFloat(valorProduto.replace(',', '.'))
+            x = '<strong>Total</strong><p id="tot{{produto.pk}}">R$'+valQtdProd.toFixed(2).replace('.',',')+'</p>'
+            y = '<input type="text" hidden name="campoValor" id="valor'+produtoPK+'" value="'+valQtdProd+'">'
+            $('#total'+produtoPK).html(x+y)
+        }
+        totalComanda = 0
+        valores = document.getElementsByName('campoValor')
+        for (c = 0; c < valores.length; c++){
+            totalComanda += parseFloat(valores[c].value)
+        }
+        totalComanda = totalComanda.toFixed(2)
+        $('#valorComanda').html('<strong>Valor da comanda: R$'+totalComanda+'</strong>')
+    }
+</script>
+{% endblock %}
+
+{% block conteudo %}
+
+<h3>
+    {{titulo}}
+</h3>
+<p class="lead">Preencha todos os campos obrigatórios (*).</p>
+
+<hr>
+<div class="row justify-content-around">
+    {% for produto in object_list.4 %}
+        <div class="card mb-2 text-center" style="width: 18rem;">
+            <img src="{{produto.produto.imagem.url}}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+            <div class="card-body">
+            <h5 class="card-title">{{produto.produto.nome}}</h5>
+            <p class="card-text">
+                {% if produto.produto.descricao %}
+                    {{produto.produto.descricao}}
+                {% else %}
+                    O Produto não possui descrição.
+                {% endif %}
+            </p>
+            <br>
+            <div class="row justify-content-around">
+                <div class="col">
+                    <b>Pedidos</b>
+                </div>
+                <div class="col">
+                    <b>Entregue</b>
+                </div>
+            </div>
+            <dvi class="row">
+                <div class="col">
+                    {{produto.quantidade}}
+                </div>
+                <div class="col">
+                    {{produto.quantidadeEntregue}}
+                </div>
+            </dvi>
+            </div>
+        </div>
+    {%endfor%}
+</div>
+<form action="" class="text-center needs-validation" method="" id="formulario" novalidate>
+    {% csrf_token %}
+    <div class="justify-content-center text-center mb-4">
+        <h4>Número da Mesa</h4>
+        {% for mesa in object_list.3 %}
+        {% if modelo == 'update' %}
+            {% if mesa.ocupada and mesa.numero == object_list.4.0.comanda.nmrMesa.numero %}
+                <button type="button"  class="btn btn-primary mx-auto col-sm-1 mb-1" 
+                    onclick="checaMesaBox('{{mesa.pk}}'); alert('Esta é a mesa atual');"
+                    style="width: 40px;">
+                    {{mesa.numero}}
+                    <input type="checkbox" hidden checked class="mesaCHK" name="mesa{{mesa.pk}}" id="mesaCHK{{mesa.pk}}">
+                </button>
+            {% elif mesa.ocupada %}
+                <button type="button" class="btn btn-danger mx-auto col-sm-1 mb-1" 
+                    onclick="alert('A mesa selecionada está ocupada.')" style="width: 40px;">
+                    {{mesa.numero}}
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-secondary mx-auto col-sm-1 botaoMesa mb-1"
+                    onclick="checaMesaBox('{{mesa.pk}}')" id="mesa{{mesa.pk}}" style="width: 40px;">
+                    <input type="checkbox" hidden class="mesaCHK" name="mesa{{mesa.pk}}" id="mesaCHK{{mesa.pk}}">
+                    {{mesa.numero}}
+                </button>
+            {% endif %}
+        {% else %}
+            {% if mesa.ocupada %}
+            <button type="button" class="btn btn-danger mx-auto col-sm-1 mb-1" 
+                onclick="alert('A mesa selecionada está ocupada.')" style="width: 40px;">
+                {{mesa.numero}}
+            </button>
+            {% else %}
+                <button type="button" class="btn btn-secondary mx-auto col-sm-1 botaoMesa mb-1"
+                    onclick="checaMesaBox('{{mesa.pk}}');" id="mesa{{mesa.pk}}" style="width: 40px;">
+                    <input type="checkbox" hidden class="mesaCHK" name="mesa{{mesa.pk}}" id="mesaCHK{{mesa.pk}}">
+                    {{mesa.numero}}
+                </button>
+            {% endif %}
+        {%endif%}
+        {% endfor %}
+        <div class="has-validation">
+            <input type="text" name="mesaPK" class="form-control" 
+            required id="mesaPK" hidden value="{% if modelo == 'update'%}{{object_list.4.0.comanda.nmrMesa.pk}}{% endif %}"
+            onkeypress="return event.charCode <= 48 && event.charCode >= 57;">
+            <div class="invalid-feedback">
+                Por favor, selecione uma mesa.
+            </div>
+        </div>
+    </div>
+    <h4>Colaborador</h4>
+    {% if request.user.is_staff or request.user.is_superuser %}
+    <select name="funcionario" class="select form-select mb-4" id="funcionario" required>
+    {% else %}
+    <select name="funcionario" class="select form-select mb-4" id="funcionario" required>
+    {%endif%}
+        {% if request.user.is_staff or request.user.is_superuser and not request.user.is_anonymous %}
+            <option disabled selected value="">Selecione o colaborador.</option>
+            {% for funcionario in object_list.2 %}
+            
+                {% if funcionario.contaFuncionario.id == request.user.id %}
+                    <option value="{{funcionario.pk}}" selected>
+                        {{funcionario.primeiro_nome}} {{funcionario.segundo_nome}} - {{funcionario.funcao.nome}}
+                    </option>
+                {% else %}    
+                    <option value="{{funcionario.pk}}">
+                        {{funcionario.primeiro_nome}} {{funcionario.segundo_nome}} - {{funcionario.funcao.nome}}
+                    </option>
+                {%endif%}
+            {% endfor %}
+        {% elif request.user.is_anonymous %}
+            <option value="{{object_list.2.0.pk}}" selected>{{object_list.2.0.primeiro_nome}} {{object_list.2.0.segundo_nome}}</option>
+        {% else %}
+            {% for func in object_list.2 %}
+                {% if func.contaFuncionario_id == request.user.id %}
+                    <option value="{{func.pk}}" selected>{{user.first_name}} {{user.last_name}}</option>
+                {%endif%}
+            {% endfor%}
+        {% endif %}
+                </select>
+    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false">
+        <div class="row">
+            {% for tipo in object_list.1 %}
+                <button type="button" data-bs-target="#carouselProdutos" 
+                        data-bs-slide-to={{forloop.counter|add:'-1'}} 
+                        class="col btn btn-sm mb-2 botTipo" 
+                        aria-current="true" aria-label="Slide {{forloop.counter}}" 
+                        style="border: 1px solid gray; margin-right: 5px;"
+                        id="tipo{{tipo.pk}}"
+                        onclick="$('.botTipo').removeClass('btn-primary');$('#tipo{{tipo.pk}}').addClass('btn-primary');">
+                        {{tipo.tipo}}
+                </button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for tipo in object_list.1 %}
+                {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+                {% else %}
+                    <div class="carousel-item mt-3">
+                {%endif%}
+                        {% for produto in object_list.0 %}
+                            {% if produto.tipoProduto == tipo %}
+                            <div class="row mb-2 align-items-center d-flex" id="card{{produto.pk}}"
+                                 style="margin-left: 2%; margin-right: 2%; border: 1px solid rgb(158, 158, 158); border-radius: 25px;" >
+                                <div class="col-sm-3">
+                                    {% if produto.imagem %}
+                                        <img src="{{produto.imagem.url}}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+                                    {% else %}
+                                        <img src="{% static 'img/semIMG.png' %}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+                                    {% endif %}
+                                </div>
+                                <div class="col mt-1">
+                                    <h3>{{produto.nome}}</h3>
+                                    {% if produto.descricao %}
+                                        {{produto.descricao}}
+                                    {% else %}
+                                        O produto não possui descrição.
+                                    {% endif %}
+                                    <br>
+                                    R${{produto.preco}} cada
+                                </div>
+                                <div class="col-sm-3 align-items-center">
+                                    <div class="row justify-content-around align-items-center ">
+                                        <button type="button" class="btn btn-danger btn-sm col-sm-1" style="width: 38px;"
+                                        onclick="atualizaQuantidade('{{produto.pk}}', '{{produto.preco}}', -1);">
+                                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                        </button>
+                                        <input type="text" name="qtd{{produto.pk}}"
+                                            id="qtd{{produto.pk}}"
+                                            value="0"
+                                            class="text-center col-md-5 campoQTD"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57;">
+                                            <script>
+                                                $("#qtd{{produto.pk}}").on('input', function () { 
+                                                    atualizaQuantidade('{{produto.pk}}','{{produto.preco}}', 0) 
+                                                });
+                                            </script>
+
+                                        <button type="button" class="btn btn-primary btn-sm col-sm-1 mb-2" style="width: 38px;"
+                                        onclick="atualizaQuantidade('{{produto.pk}}', '{{produto.preco}}', 1);">
+                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <div id="total{{produto.pk}}"></div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+            {% endfor %}
+        </div>
+        <hr class="col-lg-8 mx-auto">
+        <div class="mx-auto col-md-6 mt-3">
+            <label for="observacao">Observação</label>
+            <textarea class="form-control mx-auto" name="observacao" id="observacao" 
+                rows="3" aria-label="Observação"
+            style="max-width: 500px;">{%if object_list.4.0.comanda.observacao %}{{object_list.4.0.comanda.observacao}}{%endif%}</textarea>
+        </div>
+    </div>
+    <h5 class="text-center sticky-bottom bg-light text-bg-light mt-1 mb-1" id="valorComanda">
+    </h5>
+    <div class="container text-center mt-3 mx-auto">
+        <div class="row mx-auto">
+            <div class="col">
+                {% if request.user.is_anonymous %}
+                <button type="button" data-bs-toggle="modal" data-bs-target="#telaVerificacao" class="btn btn-success">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                     {{botao_submit}}
+                </button>
+                {% else %}
+                <button type="button" onclick="fazerPedido()" class="btn btn-success">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                     Confirmar
+                </button>
+                {%endif%}
+            </div>
+
+            <div class="col">
+                <button type="button" class="btn btn-danger"
+                 onclick="history.back();">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                     Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user.is_anonymous %}
+    <div class="modal fade" id="telaVerificacao" tabindex="-1" aria-labelledby="modalVerificar" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalVerificar">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Um código será enviado para o email inserido.
+                <div class="row justify-content-around text-center mt-2 mb-2 g-3">
+                    <div class="col-auto">
+                        Seu email:
+                    </div>
+                    <div class="col-auto">
+                        <input type="email" id="email" class="text-center form-control" alt="Campo destinado ao email."
+                            onclick="
+                            if ($('#email').val() == 'Email Inválido!'){
+                                $('#email').attr('style', '');
+                                $('#email').val('')
+                            }
+                            ">
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" id="enviarCodigo" class="btn btn-sm btn-secondary">Enviar código</button>
+                    </div>
+                </div>
+                <div id="campoCodigo">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+            <button type="button" id='undefined' class="btn btn-danger" onclick="alert('Verifique seu email primeiro!')">Pedir</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endif %}
+    <hr>
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/ajaxJQuery.js' %}"></script>
+<script src="{% static 'js/jquery.mask.min.js' %}"></script>
+<script src="{% static 'js/jscolor.js' %}"></script>
+<script>
+    $('#formulario').attr('action', '');
+    $('#formulario').attr('method', '');
+    function checaMesaBox(mesaPK){
+        $('.mesaCHK').prop('checked', false);
+        $('.botaoMesa.btn-success').addClass('btn-secondary').removeClass('btn-success');
+        objCheck = $('input[name=mesa'+mesaPK+']');
+        if(objCheck.prop('checked')){
+            objCheck.prop('checked', false);
+        }else{
+            objCheck.prop('checked', true);
+            $('#mesa'+mesaPK).addClass('btn-success').removeClass('btn-secondary');
+        }
+        $('#mesaPK').val(mesaPK)
+    }
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        $(document).ready(function () {
+            Array.from(forms).forEach(form => {
+                document.getElementById('enviar').addEventListener('click', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+    
+                form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+        });
+    $('#enviarCodigo').click(function () {
+        if (verificarEmail()){
+            $.ajax({
+                type: "GET",
+                url: "{% url 'enviarCodigoUnicoMail' %}",
+                data: {
+                    emUser: $('#email').val()
+                },
+                success: function (response) {
+                },
+            });
+        }
+    });
+    function verifyBackEnd () {
+        $.ajax({
+            type: "GET",
+            url: "{% url 'enviarCodigoUnicoMail' %}",
+            data: {
+                code: $('#codeVerify').val(),
+                ident: '1',
+            },
+            success: function (response) {
+                $('#undefined').attr('class', 'btn btn-success').attr('id', 'enviar').attr('onclick', 'fazerPedido()')
+            },
+            error: function(response) {
+                alert('Não foi possível completar a ação. Será que você já não possui uma comanda aberta?')
+            }
+        });
+    }
+</script>
+{% if request.user.is_anonymous %}
+<script>
+    function fazerPedido() {
+        mesaPK = $('#mesaPK').val()
+        funcPK = $('#funcionario').val()
+        prods = $('input[name=campoValor]')
+        emailAnon = $('#email').val()
+        produtosPK = []
+        produtosQTD = []
+        for (c = 0; c < prods.length; c++){
+            produtosPK.push(prods[c].id.replace('valor', ''))
+            produtosQTD.push($('#qtd'+produtosPK[c]).val())
+        }
+        if (produtosQTD.length >= 1 && prods.length >= 1){
+            try{
+                if (produtosPK.length >= 1 && produtosQTD.length, funcPK.length, (mesaPK != 0)){
+                    observacao = $('textarea[name=observacao]').val()
+                    produtosPK = JSON.stringify(produtosPK)
+                    produtosQTD = JSON.stringify(produtosQTD)
+                    $.ajax({
+                        type: "GET",
+                        url: "{% url 'criarpedidoAjax' %}",
+                        data: {
+                            mesaPK: mesaPK,
+                            funcPK: funcPK,
+                            produtoPK: produtosPK,
+                            produtoQTD: produtosQTD,
+                            observacao: observacao,
+                            modelo: '{{modelo}}',
+                            email: emailAnon
+                        },
+                        success: function (response) {
+                            window.location.replace('{% if not request.user.is_anonymous%}{% url "listar-comanda" %}{%else%}{%url "index"%}{%endif%}');
+                        }
+                }); 
+                }
+            }
+            catch(e){
+                console.log(e)
+            }
+        }else{
+            alert('Selecione um produto primeiro!')
+        }
+    }
+</script>
+{% else %}
+<script>
+    function fazerPedido() {
+        mesaPK = $('#mesaPK').val()
+        funcPK = $('#funcionario').val()
+        prods = $('input[name=campoValor]')
+        produtosPK = []
+        produtosQTD = []
+        for (c = 0; c < prods.length; c++){
+            produtosPK.push(prods[c].id.replace('valor', ''))
+            produtosQTD.push($('#qtd'+produtosPK[c]).val())
+        }
+        if (produtosQTD.length >= 1 && prods.length >= 1){
+            try{
+                if (produtosPK.length >= 1 && produtosQTD.length, funcPK.length, (mesaPK != 0)){
+                    observacao = $('textarea[name=observacao]').val()
+                    produtosPK = JSON.stringify(produtosPK)
+                    produtosQTD = JSON.stringify(produtosQTD)
+                    $.ajax({
+                        type: "GET",
+                        url: "{% url 'criarpedidoAjax' %}",
+                        data: {
+                            mesaPK: mesaPK,
+                            funcPK: funcPK,
+                            produtoPK: produtosPK,
+                            produtoQTD: produtosQTD,
+                            observacao: observacao,
+                            modelo: '{{modelo}}'
+                        },
+                        success: function (response) {
+                            window.location.replace('{% url "listar-comanda" %}');
+                        }
+                }); 
+                }
+            }
+            catch(e){
+                console.log(e)
+            }
+        }else{
+            alert('Selecione um produto primeiro!')
+        }
+    }
+</script>
+{% endif %}
+{% if modelo == 'update' %}
+    {% for prodPedido in object_list.4 %}
+        <script>
+            $('#qtd{{prodPedido.produto.pk}}').val('{{prodPedido.quantidade}}');
+            atualizaQuantidade(produtoPK='{{prodPedido.produto.pk}}', valorProduto='{{prodPedido.produto.preco}}', alteracao=0);
+        </script>
+    {%endfor%}
+{% endif %}
+{% endblock %}

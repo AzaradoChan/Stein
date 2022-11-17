@@ -1,0 +1,49 @@
+{% extends 'paginas/modelo.html' %}
+{% load static %}
+{% block titulo %}
+Demitir Funcionário
+{% endblock %}
+
+{% block conteudo %}
+
+<form action="" method="POST" class="text-center">
+    <p class="text-danger text-center">
+        <i class="fa fa-warning" aria-hidden="true"></i> Esta ação pode ser revertida <i class="fa fa-warning" aria-hidden="true"></i>
+    </p>
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <br>
+    <p>Você realmente deseja demitir o funcionário?</p>
+
+    <div class="container row">
+        <div class="text-start col">
+            <button type="submit" class="btn btn-danger">
+                Sim
+            </button>
+        </div>
+
+        <div class="text-end col">
+            <a class="btn btn-success" href="{% url 'listar-funcionario' %}">
+                Não
+            </a>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/jquery.mask.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('#id_demitido').prop('checked', true);
+        $('p>#id_demitido').hide();
+        $('#id_dataDemicao').prop('required', true);
+        $('#id_motivoDemicao').addClass('form-control');
+        $('#id_dataDemicao').addClass('form-control')
+        $('#id_dataDemicao').get(0).type = 'date';
+    });
+</script>
+{% endblock %}

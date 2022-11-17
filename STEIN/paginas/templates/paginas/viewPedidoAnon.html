@@ -1,0 +1,60 @@
+{% extends 'paginas/modelo.html' %}
+
+{% load static %}
+
+{%block conteudo %}
+<div style="border: 1px solid gray; border-radius: 50px; background-color: rgb(245, 245, 229);">
+    <h3 style="margin-left:40px; margin-right:40px;">Produtos Registrados na Sua Comanda</h3>
+    <div class="row mt-2 mb-4 justify-content-around">
+        {% for produto in object_list.1 %}
+            <div class="card mb-2 text-center" style="width: 18rem;">
+                <img src="{{produto.produto.imagem.url}}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
+                <div class="card-body">
+                <h5 class="card-title">{{produto.produto.nome}}</h5>
+                <p class="card-text">
+                    {% if produto.produto.descricao %}
+                        {{produto.produto.descricao}}
+                    {% else %}
+                        O Produto não possui descrição.
+                    {% endif %}
+                </p>
+                <br>
+                <div class="row justify-content-around">
+                    <div class="col">
+                        <b>Pedidos</b>
+                    </div>
+                    <div class="col">
+                        <b>Entregue</b>
+                    </div>
+                </div>
+                <dvi class="row">
+                    <div class="col">
+                        {{produto.quantidade}}
+                    </div>
+                    <div class="col">
+                        {{produto.quantidadeEntregue}}
+                    </div>
+                </dvi>
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+    <div class="row text-center" style="margin-left: 50px; margin-right: 50px;">
+        <button class="btn btn-warning btn-lg" type="button">Chamar Garçom</button>
+    </div>
+</div>
+<div class="row mt-3 mb-3 mx-auto text-center justify-content-around">
+    <div class="col">
+        <a href="{% url 'index' %}" class="btn btn-primary">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            Voltar
+        </a>
+    </div>
+    <div class="col">
+        <a href="{% url 'listar-produto' %}" class="btn btn-secondary">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            Cardápio
+        </a>
+    </div>
+</div>
+{%endblock%}

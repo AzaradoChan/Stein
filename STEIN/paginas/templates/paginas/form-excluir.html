@@ -1,0 +1,56 @@
+{% extends 'paginas/modelo.html' %}
+
+{% load static %}
+
+{% block titulo %}
+{{titulo}}
+{% endblock %}
+
+{% block destaque %}
+{% endblock %}
+
+{% block conteudo %}
+<p class="lead text-center">
+    Você realmente deseja excluir o registro?
+</p>
+
+<hr>
+
+<form action="" method="POST" class="text-center">
+
+    <p>
+        Registro: 
+        <br>
+        <h3 class="text-break"><b>{{ object }}</b></h3>
+    </p>
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <br>
+    <p class="text-danger">
+        <i class="fa fa-warning" aria-hidden="true"></i>
+        Atenção, esta ação não pode ser desfeita.
+        <i class="fa fa-warning" aria-hidden="true"></i>
+    </p>
+
+    <div class="container row">
+        <div class="text-start col">
+            <button type="button" class="btn btn-primary"
+            onclick="history.back()">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                Voltar
+            </button>
+        </div>
+
+        <div class="text-end col">
+            <button type="submit" class="btn btn-danger" scale>
+                <i class="fa fa-trash" aria-hidden="true"></i>
+                Excluir
+            </button>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
