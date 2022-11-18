@@ -7,7 +7,26 @@ Lista de Comandas
 {% endblock %}
 
 {% block conteudo %}
+<script type="text/javascript">
+    function timedRefresh(tempo) {
+        setTimeout('location.reload(true);', tempo);
+    }
+    window.onload = timedRefresh(15000);
 
+    function atenderChamado(mesaID) {
+        $.ajax({
+            type: "GET",
+            url: "{% url 'chamar-garcom' %}",
+            data: {
+                mesaID: mesaID,
+            },
+            success: function (response) {
+                $('#chamadoGarcom').attr('class', '')
+                document.location.reload(true);
+            }
+        });
+    }
+</script>
 <div class="table mt-3 text-center">
     <table class="table">
         <tr>
@@ -46,53 +65,57 @@ Lista de Comandas
 
             <div class="col text-end">
                 <button type="submit" class="btn btn-sm">Buscar</button>
-            
+
                 <a href="{% url 'listar-comanda' %}" class="btn btn-sm">Limpar</a>
             </div>
         </div>
     </form>
     {% for obj in object_list.0 %}
-        {% if obj.encerrada %}
-            <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}" style="border: 2px solid rgb(117, 8, 8); border-radius: 5px;">
+    {% if obj.encerrada %}
+    <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}"
+        style="border: 2px solid rgb(117, 8, 8); border-radius: 5px;">
         {% else %}
-            <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}" style="border: 2px solid rgb(17, 117, 8); border-radius: 5px;">
-        {%endif%}
+        <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}"
+            style="border: 2px solid {% if obj.nmrMesa.garcom == 1 %} rgb(180, 180, 0) {%else%} rgb(17, 117, 8) {%endif%}; border-radius: 5px;">
+            {%endif%}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-heading{{obj.pk}}">
-                    <button class="accordion-button collapsed"
-                    type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{obj.pk}}"
-                    aria-expanded="false" aria-controls="flush-collapse{{obj.pk}}">
-                    <b>Mesa:</b> <span style='margin-left: 5px;'> {{obj.nmrMesa}} - {{obj.dataHoraCriada}} - Valor Total: R${{obj.valorTotal}}</span>
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapse{{obj.pk}}" aria-expanded="false"
+                        aria-controls="flush-collapse{{obj.pk}}">
+                        <b>Mesa:</b> <span style='margin-left: 5px;'> {{obj.nmrMesa}} - {{obj.dataHoraCriada}} - Valor
+                            Total: R${{obj.valorTotal}}</span>
                     </button>
                 </h2>
-                
-                <div id="flush-collapse{{obj.pk}}" class="accordion-collapse collapse" 
-                aria-labelledby="flush-heading{{cargo.pk}}" data-bs-parent="#accordionFlush{{obj.pk}}">
+
+                <div id="flush-collapse{{obj.pk}}" class="accordion-collapse collapse"
+                    aria-labelledby="flush-heading{{cargo.pk}}" data-bs-parent="#accordionFlush{{obj.pk}}">
                     <div class="accordion-body" style="margin-left: 50px;">
                         <div class="row text-start">
                             <div class="col-sm-2"><b>Produtos:</b></div>
                             <div class="col-md-8" style="margin-left: 15px;">
-                            {% for prod in obj.produtos.all %}
+                                {% for prod in obj.produtos.all %}
                                 {% for pedido in object_list.1 %}
-                                    {% if obj.pk == pedido.comanda_id and prod.pk == pedido.produto_id %}
-                                        <span class="row mb-2" style="border: 1px solid rgb(58, 58, 58); border-radius:10px;">
-                                            <span class="col">{{prod.nome}}</span>
-                                            <span class="col">{{pedido.quantidade}} x R${{prod.preco}} = <span class="text-success">R${{prod.preco|mul:pedido.quantidade}}</span></span>
-                                        </span>
-                                    {% endif %}
+                                {% if obj.pk == pedido.comanda_id and prod.pk == pedido.produto_id %}
+                                <span class="row mb-2" style="border: 1px solid rgb(58, 58, 58); border-radius:10px;">
+                                    <span class="col">{{prod.nome}}</span>
+                                    <span class="col">{{pedido.quantidade}} x R${{prod.preco}} = <span
+                                            class="text-success">R${{prod.preco|mul:pedido.quantidade}}</span></span>
+                                </span>
+                                {% endif %}
                                 {% endfor %}
-                            {% endfor %}
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="row text-start">
                             <div class="col-sm-2"><b>Observação:</b></div>
                             <div class="col-md-8" style="margin-left: 15px;">
                                 {% if obj.observacao == ' ' %}
-                                    Não há observações.
+                                Não há observações.
                                 {% elif obj.observacao != Null %}
-                                    {{obj.observacao}}
+                                {{obj.observacao}}
                                 {% else %}
-                                    Não há observações.
+                                Não há observações.
                                 {% endif %}
                             </div>
                         </div>
@@ -117,7 +140,8 @@ Lista de Comandas
                         <div class="row text-start">
                             <div class="col-sm-2"><b>Funcionário:</b></div>
                             <div class="col-md-8" style="margin-left: 15px;">
-                                {{obj.funcionario.primeiro_nome}} {{obj.funcionario.segundo_nome}} - {{obj.funcionario.funcao.nome}}
+                                {{obj.funcionario.primeiro_nome}} {{obj.funcionario.segundo_nome}} -
+                                {{obj.funcionario.funcao.nome}}
                             </div>
                         </div>
                         <div class="row text-start">
@@ -126,7 +150,7 @@ Lista de Comandas
                                 {{obj.dataHoraCriada}}
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="row justify-content-around text-center">
                         {% if perms.mesas.delete_comanda %}
@@ -137,12 +161,22 @@ Lista de Comandas
                         </div>
                         {% endif %}
                         {% if not obj.encerrada and perms.mesas.change_comanda %}
-                            <div class="col-sm-2">
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal{{obj.nmrMesa}}">
-                                    <i class="fa fa-money" aria-hidden="true"></i>
-                                    Pagar / Encerrar
-                                </button>
-                            </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal{{obj.nmrMesa}}">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                Pagar / Encerrar
+                            </button>
+                        </div>
+                        {% endif %}
+                        {% if obj.nmrMesa.garcom != 0 %}
+                        <div class="col-sm-2" id="chamadoGarcom">
+                            <button type="button" class="btn btn-warning"
+                                onclick="atenderChamado('{{obj.nmrMesa.id}}');">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                Chamado Atendido
+                            </button>
+                        </div>
                         {% endif %}
                         {% if perms.mesas.change_comanda %}
                         <div class="col-sm-2">
@@ -153,14 +187,15 @@ Lista de Comandas
                         {% endif %}
                     </div>
                     {% if not obj.encerrada %}
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal{{obj.nmrMesa}}" tabindex="-1" 
-                            aria-labelledby="exampleModalLabel{{obj.nmrMesa}}" aria-hidden="true">
-                            <div class="modal-dialog">
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal{{obj.nmrMesa}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel{{obj.nmrMesa}}" aria-hidden="true">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel{{obj.nmrMesa}}">Modal title</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{obj.nmrMesa}}">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row justify-content-around ">
@@ -179,42 +214,44 @@ Lista de Comandas
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                <button type="button" class="btn btn-primary" onclick="Salvar('{{obj.pk}}')">Salvar</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="Salvar('{{obj.pk}}')">Salvar</button>
                                 </div>
                             </div>
-                            </div>
                         </div>
+                    </div>
                     {% endif %}
                     <hr>
                 </div>
             </div>
         </div>
-    {% empty %}
+        {% empty %}
         <p>Não há comandas abertas no sistema.</p>
-    {% endfor %}
+        {% endfor %}
 
-</div>
+    </div>
 
-<script>
-    function Salvar(comandaPK){
-        encerrar = false
-        if ($('#enc'+comandaPK).is(":checked")){
-            encerrar = true
-        }
-        valPago = $('#valPago'+comandaPK).val()
-        $.ajax({
-            type: "GET",
-            url: "{% url 'atualizarPagComanda' %}",
-            data: {
-                encerrada: encerrar,
-                valorPago: valPago,
-                comandaPK: comandaPK
-            },
-            success: function (response) {
-                window.location.replace('{% url "listar-comanda" %}');
+    <script>
+        function Salvar(comandaPK) {
+            encerrar = false
+            if ($('#enc' + comandaPK).is(":checked")) {
+                encerrar = true
             }
-        });
-    }
-</script>
-{% endblock %}
+            valPago = $('#valPago' + comandaPK).val()
+            $.ajax({
+                type: "GET",
+                url: "{% url 'atualizarPagComanda' %}",
+                data: {
+                    encerrada: encerrar,
+                    valorPago: valPago,
+                    comandaPK: comandaPK
+                },
+                success: function (response) {
+                    window.location.replace('{% url "listar-comanda" %}');
+                }
+            });
+        }
+    </script>
+    {% endblock %}
