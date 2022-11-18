@@ -183,6 +183,27 @@ class ComandaList(GroupRequiredMixin, ListView):
         return comandas, listaPedidos
 
 
+class ComandaSimplesList(GroupRequiredMixin, ListView):
+    login_url = reverse_lazy('entrar')
+    group_required = gruposComanda + gCAdministrativo
+    template_name = 'paginas/listas/comanda-Simples.html'
+    model = Comanda
+
+    def get_queryset(self):
+        
+        mesas = Mesa.objects.all()
+        mesasOcup = Mesa.objects.filter(ocupada=True)
+        mesasGarcom = []
+        mesasOcupadas = []
+        for mesa in mesas:
+            if mesa.ocupada == True:
+                mesasOcupadas.append(mesa.id)
+            if mesa.garcom == True:
+                mesasGarcom.append(mesa.id)
+
+        return mesas, mesasOcupadas, mesasGarcom
+
+
 class VerComandaAnonList(ListView):
     template_name = 'paginas/viewPedidoAnon.html'
     model = Comanda

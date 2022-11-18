@@ -3,14 +3,15 @@ from django.urls import path
 
 from .views import ComandaCreate, criarComanda
 from .views import atualizarProdutoComanda, atualizarPedido, atualizarValorPagoComanda, chamarGarcom
-from .views import ComandaList, ComandaProdutoList, ComandaRetaguardaList, VerComandaAnonList
+from .views import ComandaList, ComandaProdutoList, ComandaRetaguardaList, VerComandaAnonList, ComandaSimplesList
 from .views import ComandaDelete
 
 urlpatterns = [
     path('fazer-pedido/', ComandaCreate.as_view(), name='cad-comanda'),
     path('fazer-pedido/criarcomanda/', criarComanda, name='criarpedidoAjax'),
 
-    path('listar/comandas/', ComandaList.as_view(), name='listar-comanda'),
+    path('listar/comandas/gerenciamento', ComandaList.as_view(), name='listar-comanda'),
+    path('listar/comandas/', ComandaSimplesList.as_view(), name='gerencia-comanda'),
     path('listar/comandas/retaguarda/',
          ComandaRetaguardaList.as_view(), name='listar-retaguarda'),
 

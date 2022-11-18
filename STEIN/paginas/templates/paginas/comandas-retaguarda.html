@@ -38,7 +38,13 @@
 {% block conteudo %}
 {% for comanda in object_list.1 %}
 <div class="card mb-2">
-    <div class="card-header" style="background-color: rgb(66, 66, 66); color: white;">
+    <div class="card-header" style=" background-color: gol;
+    {% if comanda.comanda.nmrMesa.garcom %}
+        background-color: goldenrod; color: black;
+    {% else %}
+    background-color: rgb(66, 66, 66); color: white;
+    {%endif%}"
+        >
         <div class="row">
             <div class="col">
                 Mesa: {{comanda.comanda.nmrMesa}}

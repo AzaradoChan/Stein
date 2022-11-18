@@ -20,6 +20,7 @@ Visualização do Pedido
                 $('#botaoGarcom').attr('class', 'btn btn-success btn-lg').attr('onclick', 'alert("Você já chamou o garçom.");')
                 $('#iconGarcom1').attr('class', 'fa')
                 $('#iconGarcom2').attr('class', 'fa fa-thumbs-up')
+                $('#textGarcom').html('O Garçom já está a caminho.')
             }
         });
     };
@@ -62,12 +63,19 @@ Visualização do Pedido
         {%endfor%}
     </div>
     <div class="row text-center mb-3" style="margin-left: 50px; margin-right: 50px;">
+        {% if object_list.0.nmrMesa.garcom %}
+        <button class="btn btn-success btn-lg" type="button">
+            O Garçom já está a caminho.
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+        </button>
+        {% else %}
         <button class="btn btn-warning btn-lg" type="button" id="botaoGarcom"
             onclick="chamar('{{ object_list.1.0.comanda.nmrMesa.id }}')">
             <i class="fa fa-bell" id="iconGarcom1" aria-hidden="true"></i>
-            <span id="textGarcon">Chamar Garçom</span>
+            <span id="textGarcom">Chamar Garçom</span>
             <i class="fa" id="iconGarcom2" aria-hidden="true"></i>
         </button>
+        {% endif %}
     </div>
 </div>
 <div class="row mt-3 mb-3 mx-auto text-center justify-content-around">
