@@ -190,18 +190,21 @@ class ComandaSimplesList(GroupRequiredMixin, ListView):
     model = Comanda
 
     def get_queryset(self):
-        
+
         mesas = Mesa.objects.all()
         mesasOcup = Mesa.objects.filter(ocupada=True)
         mesasGarcom = []
         mesasOcupadas = []
+        comandas = Comanda.objects.filter(encerrada=False)
+        comandas_produtos = Comanda_Produto.objects.filter(
+            comanda__encerrada=False)
         for mesa in mesas:
             if mesa.ocupada == True:
                 mesasOcupadas.append(mesa.id)
             if mesa.garcom == True:
                 mesasGarcom.append(mesa.id)
 
-        return mesas, mesasOcupadas, mesasGarcom
+        return mesas, mesasOcupadas, mesasGarcom, comandas, comandas_produtos
 
 
 class VerComandaAnonList(ListView):

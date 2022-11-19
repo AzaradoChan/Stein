@@ -54,10 +54,10 @@ Lista de Comandas
     {% if obj.encerrada %}
     <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}"
         style="border: 2px solid rgb(117, 8, 8); border-radius: 5px;">
-    {% else %}
-    <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}"
-        style="border: 2px solid rgb(17, 117, 8); border-radius: 5px;">
-    {%endif%}
+        {% else %}
+        <div class="accordion accordion-flush mb-2" id="accordionFlush{{obj.pk}}"
+            style="border: 2px solid rgb(17, 117, 8); border-radius: 5px;">
+            {%endif%}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-heading{{obj.pk}}">
                     <button class="collapsed accordion-button" type="button" data-bs-toggle="collapse"
@@ -167,13 +167,13 @@ Lista de Comandas
                         {% endif %}
                     </div>
                     {% if not obj.encerrada %}
-                    <!-- Modal -->
                     <div class="modal fade" id="exampleModal{{obj.nmrMesa}}" tabindex="-1"
                         aria-labelledby="exampleModalLabel{{obj.nmrMesa}}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{obj.nmrMesa}}">Modal title</h1>
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel{{obj.nmrMesa}}">Pagar/Encerrar
+                                    </h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>

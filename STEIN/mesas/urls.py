@@ -10,7 +10,8 @@ urlpatterns = [
     path('fazer-pedido/', ComandaCreate.as_view(), name='cad-comanda'),
     path('fazer-pedido/criarcomanda/', criarComanda, name='criarpedidoAjax'),
 
-    path('listar/comandas/gerenciamento', ComandaList.as_view(), name='listar-comanda'),
+    path('listar/comandas/gerenciamento',
+         ComandaList.as_view(), name='listar-comanda'),
     path('listar/comandas/', ComandaSimplesList.as_view(), name='gerencia-comanda'),
     path('listar/comandas/retaguarda/',
          ComandaRetaguardaList.as_view(), name='listar-retaguarda'),

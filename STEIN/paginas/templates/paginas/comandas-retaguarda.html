@@ -8,10 +8,25 @@
 
 {% block scriptHeader %}
 <script type="text/javascript">
-    function timedRefresh(tempo) {
-        setTimeout('location.reload(true);', tempo);
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
-    window.onload = timedRefresh(15000);
+    async function timedRefresh(tempo) {
+        await sleep(tempo);
+        if ($('#checaAtualizar').val() == 'true') {
+            window.location.reload();
+        } else {
+            timedRefresh(10000);
+        }
+    }
+
+    function atualizaCheckAtualizar(val) {
+        if (val == 'true') {
+            $('#checaAtualizar').val(val).prop('checked', true);
+        } else if (val == 'false') {
+            $('#checaAtualizar').val(val).prop('checked', false);
+        }
+    }
 
     function atualizaQuantidade(comandaPK, produtoPK, valAlteracao = 0, qtdMax = 0, inpBool = false) {
         campoQTD = $('#qtd' + comandaPK + produtoPK)
@@ -36,15 +51,20 @@
 {% endblock %}
 
 {% block conteudo %}
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="checaAtualizar" checked>
+    <label class="form-check-label" for="checaAtualizar">
+        Selecione para Atualizar Automaticamente.
+    </label>
+</div>
 {% for comanda in object_list.1 %}
 <div class="card mb-2">
-    <div class="card-header" style=" background-color: gol;
+    <div class="card-header" style="
     {% if comanda.comanda.nmrMesa.garcom %}
         background-color: goldenrod; color: black;
     {% else %}
     background-color: rgb(66, 66, 66); color: white;
-    {%endif%}"
-        >
+    {%endif%}">
         <div class="row">
             <div class="col">
                 Mesa: {{comanda.comanda.nmrMesa}}
@@ -82,7 +102,7 @@
             <div class="row justify-content-center">
                 <button type="button" id="btParc{{comanda.comanda.id}}" data-bs-toggle="modal"
                     data-bs-target="#staticBkd{{comanda.comanda.id}}" class="btn btn-success mt-2"
-                    style="max-width: 500px;">Entregar</button>
+                    style="max-width: 500px;" onclick="atualizaCheckAtualizar('false');">Entregar</button>
             </div>
         </div>
         <div class="modal fade" id="staticBkd{{comanda.comanda.id}}" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -148,6 +168,22 @@
 {% endfor %}
 
 <script>
+
+    $(document).ready(function () {
+        if ($('#checaAtualizar').is(':checked')) {
+            $('#checaAtualizar').val('true');
+        } else {
+            $('#checaAtualizar').val('false');
+        }
+        $("#checaAtualizar").on('change', function () {
+            if ($(this).is(':checked')) {
+                $(this).val('true');
+            } else {
+                $(this).val('false');
+            }
+        });
+        timedRefresh(10000);
+    });
     function Entregar(comandaPK, total = false) {
         campos = $('input[name=qtdEntrega' + comandaPK)
         prods = []
