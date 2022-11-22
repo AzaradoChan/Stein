@@ -5,6 +5,8 @@ from equipe.models import Funcionario, Cargo, Setor
 from estoque.models import TipoProduto, Produto
 from mesas.models import Comanda, Comanda_Produto, Mesa
 
+from rest_framework.authentication import TokenAuthentication
+
 from .serializers import UserSerializer
 from .serializers import FuncionarioSerializer, SetorSerializer, CargoSerializer
 from .serializers import ProdutoSerializer, TipoProdutoSerializer
@@ -17,33 +19,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
-    # def perform_create(self, serializer):
-    #     x = self.request.data
-    #     try:
-    #         x['is_superuser']
-    #     except:
-    #         try:
-    #             x['is_staff']
-    #         except:
-    #             usuario = User.objects.create_user(
-    #             username=x['username'],
-    #             email=x['email'],
-    #             password=x['password']
-    #             )
-    #         else:
-    #             usuario = User.objects.create_user(
-    #             username=x['username'],
-    #             email=x['email'],
-    #             password=x['password'],
-    #             is_staff=True
-    #             )
-    #     else:
-    #         usuario = User.objects.create_superuser(
-    #             username=x['username'],
-    #             email=x['email'],
-    #             password=x['password'],
-    #         )
     
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff:
@@ -61,7 +36,12 @@ class FuncionarioViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('equipe.view_funcionario'):
-            return super().get_queryset()
+            usuario = self.request.query_params.get('usuario')
+            if self.request.query_params.get('usuario') != None:
+                retorno = Funcionario.objects.filter(contaFuncionario__username=usuario)
+                return retorno
+            else:
+                return None
         else:
             return None
 
@@ -131,7 +111,8 @@ class ComandaProdutoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('mesas.view_comandaproduto'):
             comanda = self.request.query_params.get('comanda')
-            if comanda is not None:
+            encerrada = self.request.query_params.get('encerrada')
+            if comanda is not None and encerrada is None:
                 return Comanda_Produto.objects.filter(comanda=comanda)
             else:
                 return super().get_queryset()
@@ -141,6 +122,7 @@ class ComandaProdutoViewSet(viewsets.ModelViewSet):
 class MesaViewSet(viewsets.ModelViewSet):
     queryset = Mesa.objects.all()
     serializer_class = MesaSerializer
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('mesas.view_mesa'):

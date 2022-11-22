@@ -116,16 +116,24 @@
                     </li>
                         {% if perms.mesas.view_comanda or request.user.is_staff %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'listar-comanda' %}">
+                                <a class="nav-link" href="{% url 'gerencia-comanda' %}">
                                     <i class="fa fa-sticky-note" aria-hidden="true"></i>
                                     Comandas
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if request.user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'listar-comanda' %}">
+                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                    Gerenciamento de Comandas
                                 </a>
                             </li>
                         {% endif %}
                         {% if perms.mesas.view_comanda or request.user.is_staff %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'listar-retaguarda' %}">
-                                    <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                                    <i class="fa fa-kitchen-set" aria-hidden="true"></i>
                                     Comandas/Retaguarda
                                 </a>
                             </li>
