@@ -97,7 +97,6 @@ class ComandaViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('mesas.view_comanda'):
             encerrada = self.request.query_params.get('encerrada')
-            print(encerrada)
             if encerrada is not None:
                 return Comanda.objects.filter(encerrada=encerrada)
             else:
