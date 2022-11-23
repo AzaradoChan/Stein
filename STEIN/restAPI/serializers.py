@@ -47,7 +47,7 @@ class ComandaProdutoSerializer(serializers.HyperlinkedModelSerializer):
         model = Comanda_Produto
         fields = '__all__'
 
-class MesaSerializer(serializers.HyperlinkedModelSerializer):
+class MesaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mesa
         fields = '__all__'

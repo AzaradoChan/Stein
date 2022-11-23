@@ -71,9 +71,9 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('estoque.view_produto'):
-            vendendo = self.request.query_params.get('vendendo')
-            if vendendo is not None:
-                return Produto.objects.filter(vendendo=vendendo)
+            idProduto = self.request.query_params.get('id')
+            if idProduto is not None:
+                return Produto.objects.filter(id=idProduto)
             else:
                 return super().get_queryset()
         else:
@@ -97,6 +97,7 @@ class ComandaViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('mesas.view_comanda'):
             encerrada = self.request.query_params.get('encerrada')
+            print(encerrada)
             if encerrada is not None:
                 return Comanda.objects.filter(encerrada=encerrada)
             else:
