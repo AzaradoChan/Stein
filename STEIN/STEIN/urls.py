@@ -28,5 +28,6 @@ urlpatterns = [
     path('djangorestframeworkapi/', include('restAPI.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('enviar_email/', include('moduloEmail.urls')),
-    re_path(r'^uploads/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    re_path(r'^uploads/(?P<path>.*)$', serve,
+            {'document_root': settings.MEDIA_ROOT})
 ]

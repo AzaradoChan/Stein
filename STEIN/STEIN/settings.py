@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-547m802%br(jg=otpu^rqumohyunb@0*20=!=ory1o2)ql^0$)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -104,12 +104,12 @@ WSGI_APPLICATION = 'STEIN.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : 'stein',              
-        'USER'    : 'root',                    
-        'PASSWORD': 'admin',            
-        'HOST'    : 'localhost',         
-        'PORT'    : '3306',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stein',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -169,7 +169,7 @@ LOGOUT_REDIRECT_URL = 'entrar'
 LOGIN_URL = 'entrar'
 
 # Email
-EMAIL_BACKEND  = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

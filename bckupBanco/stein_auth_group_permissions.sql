@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `stein` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `stein`;
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: stein
@@ -33,7 +31,7 @@ CREATE TABLE `auth_group_permissions` (
   KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
   CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +40,7 @@ CREATE TABLE `auth_group_permissions` (
 
 LOCK TABLES `auth_group_permissions` WRITE;
 /*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+INSERT INTO `auth_group_permissions` VALUES (181,5,33),(182,5,34),(183,5,35),(184,5,36),(185,5,37),(186,5,38),(187,5,39),(188,5,40),(189,5,41),(190,5,42),(191,5,43),(192,5,44),(193,5,45),(194,5,46),(195,5,47),(196,5,48),(197,5,49),(198,5,50),(199,5,51),(200,5,52),(201,5,53),(202,5,54),(203,5,55),(204,5,56),(205,5,57),(206,5,58),(207,5,59),(208,5,60),(209,5,61),(210,5,62),(211,5,63),(212,5,64),(248,6,53),(249,6,54),(250,6,56),(251,6,60),(252,6,61),(253,6,62),(247,6,64),(219,7,33),(220,7,34),(221,7,36),(222,7,37),(223,7,38),(224,7,40),(225,7,41),(226,7,42),(227,7,44),(228,7,45),(229,7,46),(230,7,47),(231,7,48),(232,7,49),(233,7,50),(234,7,51),(235,7,52),(236,7,54),(237,7,55),(238,7,56),(239,7,57),(240,7,58),(241,7,59),(242,7,60),(243,7,61),(244,7,62),(245,7,63),(246,7,64),(255,8,48),(256,8,52),(257,8,56),(258,8,60),(254,8,64),(214,9,48),(215,9,52),(216,9,53),(217,9,56),(218,9,60),(213,9,64);
 /*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-16 23:48:17
+-- Dump completed on 2022-11-23 22:36:24

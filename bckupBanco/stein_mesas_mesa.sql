@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `stein` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `stein`;
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: stein
@@ -30,7 +28,7 @@ CREATE TABLE `mesas_mesa` (
   `ocupada` tinyint(1) NOT NULL,
   `garcom` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +37,7 @@ CREATE TABLE `mesas_mesa` (
 
 LOCK TABLES `mesas_mesa` WRITE;
 /*!40000 ALTER TABLE `mesas_mesa` DISABLE KEYS */;
-INSERT INTO `mesas_mesa` VALUES (1,1,1,0),(3,2,0,0),(4,3,1,0),(5,4,0,0),(6,5,0,0),(7,6,1,0),(8,7,0,0),(9,8,0,0),(10,9,0,0),(11,10,0,0),(15,11,0,0);
+INSERT INTO `mesas_mesa` VALUES (1,1,1,0),(3,2,0,0),(4,3,1,1),(5,4,0,0),(6,5,0,0),(7,6,1,0),(8,7,0,0),(9,8,0,0),(10,9,0,0),(11,10,0,0),(15,11,0,0),(16,12,0,0),(17,13,0,0),(18,14,0,0),(19,15,1,0),(20,16,0,0),(21,17,0,0),(22,18,0,0),(23,19,0,0),(24,20,0,0),(25,21,0,0),(26,22,0,0),(27,23,0,0),(28,24,0,0),(29,25,0,0),(30,26,0,0),(31,27,0,0),(32,28,0,0),(33,29,0,0),(34,30,0,0);
 /*!40000 ALTER TABLE `mesas_mesa` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-16 23:48:19
+-- Dump completed on 2022-11-23 22:36:25
