@@ -30,10 +30,15 @@ Lista de Produtos
                         class="col btn btn-sm mb-2 botTipo" 
                         aria-current="true" aria-label="Slide {{forloop.counter}}" 
                         style="border: 1px solid gray; margin-right: 5px;"
-                        id="tipo{{tipo.pk}}"
-                        onclick="$('.botTipo').removeClass('btn-primary');$('#tipo{{tipo.pk}}').addClass('btn-primary');">
+                        id="tipo{{tipo.pk}}">
                         {{tipo.tipo}}
                 </button>
+                <script>
+                    $("#tipo{{tipo.pk}}").click(function () { 
+                        $('.botTipo').attr('style', 'border: 1px solid gray; margin-right: 5px;');
+                        $("#tipo{{tipo.pk}}").attr('style', 'border: 1px solid gray; margin-right: 5px; background-color: blue !important; color: white !important;');
+                    });
+                </script>
             {% endfor %}
         </div>
         <div class="carousel-inner">

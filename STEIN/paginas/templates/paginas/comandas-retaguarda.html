@@ -62,6 +62,8 @@
     <div class="card-header" style="
     {% if comanda.comanda.nmrMesa.garcom %}
         background-color: goldenrod; color: black;
+    {% elif comanda.produtos|length == 0 %}
+    background-color: green; color: white;
     {% else %}
     background-color: rgb(66, 66, 66); color: white;
     {%endif%}">
@@ -74,6 +76,7 @@
             </div>
         </div>
     </div>
+    {%if comanda.produtos|length != 0%}
     <div class="card-body">
         <div class="row text-center">
             <div class="col">
@@ -164,6 +167,7 @@
             </div>
         </div>
     </div>
+    {%endif%}
 </div>
 {% endfor %}
 

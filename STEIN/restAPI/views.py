@@ -135,7 +135,7 @@ class ComandaProdutoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_superuser or self.request.user.is_staff or self.request.user.has_perm('mesas.view_comandaproduto'):
             comanda = self.request.query_params.get('comanda')
-            if comanda is not None and encerrada is None:
+            if comanda is not None:
                 return Comanda_Produto.objects.filter(comanda=comanda)
             else:
                 return super().get_queryset()
