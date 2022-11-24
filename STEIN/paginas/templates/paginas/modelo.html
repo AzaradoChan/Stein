@@ -110,7 +110,7 @@
                         </a>
                         {% endif %}
                     </li>
-                    {% if perms.mesas.create_comanda or request.user.is_staff %}
+                    {% if perms.mesas.add_comanda or request.user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'gerencia-comanda' %}">
                             <i class="fa fa-sticky-note" aria-hidden="true"></i>
@@ -126,6 +126,8 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% for grupo in request.user.groups.all %}
+                    {% if grupo.name == 'Retaguarda'%}
                     {% if perms.mesas.view_comanda or request.user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'listar-retaguarda' %}">
@@ -134,6 +136,8 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% endif %}
+                    {% endfor %}
                     {% if request.user.is_anonymous %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cad-comanda' %}">

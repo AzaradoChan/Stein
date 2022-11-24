@@ -3,8 +3,8 @@ from django.views.generic.list import ListView
 
 from braces.views import GroupRequiredMixin, StaffuserRequiredMixin
 
-gCAdministrativo = [u'Administração']
 gAdm = [u'Gerência']
+gCAdministrativo = [u'Administração'] + gAdm
 
 from .models import TipoProduto, Produto
 
@@ -45,7 +45,7 @@ class ProdutoCreate(GroupRequiredMixin, StaffuserRequiredMixin, CreateView):
 
 
 
-class TipoProdutolist(GroupRequiredMixin, StaffuserRequiredMixin, ListView):
+class TipoProdutolist(GroupRequiredMixin, ListView):
     login_url = reverse_lazy('entrar')
     group_required = gAdm
     model = TipoProduto

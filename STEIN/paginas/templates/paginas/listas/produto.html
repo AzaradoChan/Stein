@@ -13,7 +13,7 @@ Lista de Produtos
             <td>
                 <h3>Listagem de todos os produtos registrados.</h3>
             </td>
-            {% if not request.user.is_anonymous %}
+            {% if not request.user.is_anonymous and perms.estoque.add_produto %}
                 <td>
                     <a href="{% url 'cad-produto' %}" class="btn btn-primary btn-sm">
                         <i class="fa fa-plus-square" aria-hidden="true"></i>

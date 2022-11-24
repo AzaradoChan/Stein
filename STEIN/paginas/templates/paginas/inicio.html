@@ -147,7 +147,6 @@ Tela Inicial
         </div>
       </div>
       {% endif %}
-    
       {% if perms.equipe.view_funcionario or request.user.is_staff or request.user.is_superuser %}
       <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
         <img src="{% static 'img/equipe.png' %}" class="card-img-top mt-2" alt="desenhos de pessoas umas ao lado das outras.">

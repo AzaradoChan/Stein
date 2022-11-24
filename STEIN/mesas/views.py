@@ -267,7 +267,7 @@ class ComandaProdutoList(GroupRequiredMixin, UpdateView):
 
 class ComandaRetaguardaList(GroupRequiredMixin, ListView):
     login_url = reverse_lazy('entrar')
-    group_required = gAdm + gViewCom
+    group_required = gCAdministrativo + gViewCom
     model = Comanda
     template_name = 'paginas/comandas-retaguarda.html'
 
