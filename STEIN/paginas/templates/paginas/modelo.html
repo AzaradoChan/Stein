@@ -126,16 +126,17 @@
                         </a>
                     </li>
                     {% endif %}
+                    <span id="comRet">
+                        <input type="checkbox" hidden name="" id="chkbxRetaguarda">
+                    </span>
                     {% for grupo in request.user.groups.all %}
-                    {% if grupo.name == 'Retaguarda'%}
-                    {% if perms.mesas.view_comanda or request.user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'listar-retaguarda' %}">
-                            <i class="fa fa-kitchen-set" aria-hidden="true"></i>
-                            Comandas/Retaguarda
-                        </a>
-                    </li>
-                    {% endif %}
+                    {% if grupo.name == 'Retaguarda' and perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
+                    <script type="text/javascript">
+                        if ($('#chkbxRetaguarda').is(':checked') == false) {
+                            $('#comRet').append('<li class="nav-item"><a class= "nav-link" href = "{% url "listar-retaguarda" %}" ><i class="fa fa-kitchen-set" aria-hidden="true"></i>Comandas / Retaguarda</a></li>');
+                            $('#chkbxRetaguarda').prop('checked', true);
+                        }
+                    </script>
                     {% endif %}
                     {% endfor %}
                     {% if request.user.is_anonymous %}

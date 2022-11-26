@@ -9,78 +9,81 @@ Tela Inicial
 
 {% block conteudo %}
 <h2>Seja Bem Vindo(a)!</h2>
-{% if perms.equipe.view_funcionario %} 
-  <div class="accordion accordion-flush" style="border: 2px solid black; border-radius:20px;" id="accordionFlushMenosPedidos">
-    <div class="accordion-item" style="border-radius:105px;">
-      <h4 class="accordion-header" id="flush-MaisPedidos" >
-        <button type="button" class="accordion-button collapsed" style="border-radius:105px;" data-bs-toggle="collapse" data-bs-target="#flush-collapseMVendidos" aria-expanded="false" aria-controls="collapseOne">
-          Mais Pedidos nos Últimos 30 dias
-        </button>
-      </h4>
-      <div id="flush-collapseMVendidos" class="accordion-collapse collapse" aria-labeled-by="flush-headingOne" data-bs-parent="accordionFlushMaisPedidos">
-        <div class="accordion-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Lugar</th>
-                <th scope="col">Produto</th>
-                <th scope="col">Quantidade</th>
+{% if perms.equipe.view_funcionario %}
+<div class="accordion accordion-flush" style="border: 2px solid black; border-radius:20px;"
+  id="accordionFlushMenosPedidos">
+  <div class="accordion-item" style="border-radius:105px;">
+    <h4 class="accordion-header" id="flush-MaisPedidos">
+      <button type="button" class="accordion-button collapsed" style="border-radius:105px;" data-bs-toggle="collapse"
+        data-bs-target="#flush-collapseMVendidos" aria-expanded="false" aria-controls="collapseOne">
+        Mais Pedidos nos Últimos 30 dias
+      </button>
+    </h4>
+    <div id="flush-collapseMVendidos" class="accordion-collapse collapse" aria-labeled-by="flush-headingOne"
+      data-bs-parent="accordionFlushMaisPedidos">
+      <div class="accordion-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Lugar</th>
+              <th scope="col">Produto</th>
+              <th scope="col">Quantidade</th>
+            </tr>
+            <tr>
+          </thead>
+          <tbody>
+            {% for pedido in prodMPedidos %}
+            {% if forloop.counter <= 10 %} <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{pedido.produto.nome}}</td>
+              <td>{{pedido.quantidade}}</td>
               </tr>
-              <tr>
-            </thead>
-            <tbody>
-              {% for pedido in prodMPedidos %}
-                {% if forloop.counter <= 10 %}
-                  <tr>
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{pedido.produto.nome}}</td>
-                    <td>{{pedido.quantidade}}</td>
-                  </tr>
-                {% endif %}
+              {% endif %}
               {% endfor %}
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  
-  <div class="accordion accordion-flush mt-2 mb-5" style="border: 2px solid black; border-radius:20px;" id="accordionFlushMenosPedidos">
-    <div class="accordion-item" style="border-radius:105px;">
-      <h4 class="accordion-header" id="flush-MenosPedidos">
-        <button type="button" class="accordion-button collapsed" style="border-radius:105px;"" data-bs-toggle="collapse" data-bs-target="#flush-collapseMenosVendidos" aria-expanded="false" aria-controls="collapseOne">
-          Menos Pedidos nos Últimos 30 dias
-        </button>
-      </h4>
-      <div id="flush-collapseMenosVendidos" class="accordion-collapse collapse" aria-labeled-by="flush-headingOne" data-bs-parent="accordionFlushMenosPedidos">
-        <div class="accordion-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Lugar</th>
-                <th scope="col">Produto</th>
-                <th scope="col">Quantidade</th>
-              </tr>
-              <tr>
-            </thead>
-            <tbody>
-              {% for pedido in prodMenosPedidos %}
-                {% if forloop.counter <= 10 %}
-                  <tr>
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{pedido.produto.nome}}</td>
-                    <td>{{pedido.quantidade}}</td>
-                  </tr>
-                {% endif %}
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endif %}
+</div>
 
+<div class="accordion accordion-flush mt-2 mb-5" style="border: 2px solid black; border-radius:20px;"
+  id="accordionFlushMenosPedidos">
+  <div class="accordion-item" style="border-radius:105px;">
+    <h4 class="accordion-header" id="flush-MenosPedidos">
+      <button type="button" class="accordion-button collapsed" style="border-radius:105px;"" data-bs-toggle=" collapse"
+        data-bs-target="#flush-collapseMenosVendidos" aria-expanded="false" aria-controls="collapseOne">
+        Menos Pedidos nos Últimos 30 dias
+      </button>
+    </h4>
+    <div id="flush-collapseMenosVendidos" class="accordion-collapse collapse" aria-labeled-by="flush-headingOne"
+      data-bs-parent="accordionFlushMenosPedidos">
+      <div class="accordion-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Lugar</th>
+              <th scope="col">Produto</th>
+              <th scope="col">Quantidade</th>
+            </tr>
+            <tr>
+          </thead>
+          <tbody>
+            {% for pedido in prodMenosPedidos %}
+            {% if forloop.counter <= 10 %} <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{pedido.produto.nome}}</td>
+              <td>{{pedido.quantidade}}</td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 <div class="col-md-10 mx-auto">
   <div class="row justify-content-around">
     {% if perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
@@ -103,71 +106,75 @@ Tela Inicial
     </div>
     {% if not request.user.is_anonymous %}
     {% if perms.mesas.add_comanda or request.user.is_staff or request.user.is_superuser %}
-      <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-        <img src="{% static 'img/fazerPedido.jpg' %}" class="card-img-top mt-2" alt="Pessoa com uma caneta na mão anotando em um caderno.">
-        <div class="card-body">
-          <h5 class="card-title">Fazer Pedido</h5>
-          <p class="card-text"> Criado para que a linha de frente crie as comandas dos clientes. </p>
-          <a href="{% url 'cad-comanda' %}" class="btn btn-primary">Pedir</a>
-        </div>
+    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+      <img src="{% static 'img/fazerPedido.jpg' %}" class="card-img-top mt-2"
+        alt="Pessoa com uma caneta na mão anotando em um caderno.">
+      <div class="card-body">
+        <h5 class="card-title">Fazer Pedido</h5>
+        <p class="card-text"> Criado para que a linha de frente crie as comandas dos clientes. </p>
+        <a href="{% url 'cad-comanda' %}" class="btn btn-primary">Pedir</a>
       </div>
+    </div>
     {% endif %}
     {% else %}
-      <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-        <img src="{% static 'img/pedido.jpg' %}" class="card-img-top mt-2" alt="Homem segurando uma comanda">
-        <div class="card-body">
-          <h5 class="card-title">Pedido</h5>
-          <p class="card-text">Aqui você pode olhar e alterar seu pedido.</p>
-          <script>
-            function verificaPedido(){
-              if ($('#codeVerify').val() == ''){
-                $('#codeVerify').attr('style', 'border: 1px solid red;').attr('value', 'Insira um código Válido')
-              }else{
-                $.ajax({
-                  type: "GET",
-                  url: "{% url 'enviarCodigoUnicoMail' %}",
-                  data: {
-                      code: $('#codeVerify').val(),
-                      ident: '0',
-                  },
-                  success: function (response) {
-                    window.location.href = response
-                  },
-                  error: function (response){
-                  }
-                });
-              }
+    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+      <img src="{% static 'img/pedido.jpg' %}" class="card-img-top mt-2" alt="Homem segurando uma comanda">
+      <div class="card-body">
+        <h5 class="card-title">Pedido</h5>
+        <p class="card-text">Aqui você pode olhar e alterar seu pedido.</p>
+        <script>
+          function verificaPedido() {
+            if ($('#codeVerify').val() == '') {
+              $('#codeVerify').attr('style', 'border: 1px solid red;').attr('value', 'Insira um código Válido')
+            } else {
+              $.ajax({
+                type: "GET",
+                url: "{% url 'enviarCodigoUnicoMail' %}",
+                data: {
+                  code: $('#codeVerify').val(),
+                  ident: '0',
+                },
+                success: function (response) {
+                  window.location.href = response
+                },
+                error: function (response) {
+                }
+              });
             }
-          </script>
-          <div class="text-center">
-            <input type="text" name="codigoUsuario" class='form-control' id="codeVerify" placeholder="Código do email"
-              onclick="$('#codeVerify').attr('style', '').attr('value', '')"> <br>
-            <button type="button" class="btn btn-primary" onclick="verificaPedido()">Ver Pedido</button>
-          </div>
+          }
+        </script>
+        <div class="text-center">
+          <input type="text" name="codigoUsuario" class='form-control' id="codeVerify" placeholder="Código do email"
+            onclick="$('#codeVerify').attr('style', '').attr('value', '')"> <br>
+          <button type="button" class="btn btn-primary" onclick="verificaPedido()">Ver Pedido</button>
         </div>
       </div>
-      {% endif %}
-      {% if perms.equipe.view_funcionario or request.user.is_staff or request.user.is_superuser %}
-      <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-        <img src="{% static 'img/equipe.png' %}" class="card-img-top mt-2" alt="desenhos de pessoas umas ao lado das outras.">
-        <div class="card-body">
-          <h5 class="card-title">Gerenciar Equipe</h5>
-          <p class="card-text">Gerenciamento de todos os colaboradores que trabalham, ou já trabalharam, no restaurante.</p>
-          <a href="{% url 'listar-funcionario' %}" class="btn btn-primary">Gerenciar</a>
-        </div>
+    </div>
+    {% endif %}
+    {% if perms.equipe.view_funcionario or request.user.is_staff or request.user.is_superuser %}
+    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+      <img src="{% static 'img/equipe.png' %}" class="card-img-top mt-2"
+        alt="desenhos de pessoas umas ao lado das outras.">
+      <div class="card-body">
+        <h5 class="card-title">Gerenciar Equipe</h5>
+        <p class="card-text">Gerenciamento de todos os colaboradores que trabalham, ou já trabalharam, no restaurante.
+        </p>
+        <a href="{% url 'listar-funcionario' %}" class="btn btn-primary">Gerenciar</a>
       </div>
-      {%endif%}
+    </div>
+    {%endif%}
 
-      {% if perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
-      <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-        <img src="{% static 'img/retaguarda.jpeg' %}" class="card-img-top mt-2" alt="desenhos de pessoas umas ao lado das outras.">
-        <div class="card-body">
-          <h5 class="card-title">Comandas da Cozinha</h5>
-          <p class="card-text">Exibição das comandas próprias para a retaguarda.</p>
-          <a href="{% url 'listar-retaguarda' %}" class="btn btn-primary">Olhar</a>
-        </div>
+    {% if perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
+    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+      <img src="{% static 'img/retaguarda.jpeg' %}" class="card-img-top mt-2"
+        alt="desenhos de pessoas umas ao lado das outras.">
+      <div class="card-body">
+        <h5 class="card-title">Comandas da Cozinha</h5>
+        <p class="card-text">Exibição das comandas próprias para a retaguarda.</p>
+        <a href="{% url 'listar-retaguarda' %}" class="btn btn-primary">Olhar</a>
       </div>
-      {%endif%}
+    </div>
+    {%endif%}
   </div>
 </div>
 {% endblock %}
