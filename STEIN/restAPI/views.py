@@ -1,4 +1,6 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, mixins
+
+import json
 
 from django.contrib.auth.models import User
 from equipe.models import Funcionario, Cargo, Setor
@@ -12,6 +14,7 @@ from .serializers import FuncionarioSerializer, SetorSerializer, CargoSerializer
 from .serializers import ProdutoSerializer, TipoProdutoSerializer
 from .serializers import ComandaSerializer, ComandaProdutoSerializer, MesaSerializer
 
+from mesas.views import AtualizaValTotComanda
 
 # Create your models here.
 
@@ -125,6 +128,36 @@ class ComandaViewSet(viewsets.ModelViewSet):
         else:
             return None
 
+    def create(self, request, *args, **kwargs):
+        dados = request.data
+        produtos = [{
+            'id':'2',
+            'quantidade':'5'
+        },{
+            'id':'4',
+            'quantidade':'1'
+        },{
+            'id':'3',
+            'quantidade':'2'
+        }]
+
+        comanda = super().create(request, *args, **kwargs)
+        com = Comanda.objects.get(nmrMesa=dados['nmrMesa'], funcionario=dados['funcionario'], encerrada=False)
+        
+        mesa = Mesa.objects.get(id=dados['nmrMesa'])
+        mesa.ocupada = True
+        mesa.save()
+
+        for produto in produtos:
+            if str(produto['quantidade']) != '0':
+                Comanda_Produto.objects.create(
+                    comanda_id=com.id,
+                    produto_id=produto['id'],
+                    quantidade=produto['quantidade']
+                )
+
+        AtualizaValTotComanda(com)
+        return(comanda)
 
 class ComandaProdutoViewSet(viewsets.ModelViewSet):
     queryset = Comanda_Produto.objects.all()

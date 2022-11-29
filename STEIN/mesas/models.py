@@ -21,7 +21,7 @@ class Mesa(m.Model):
 class Comanda(m.Model):
     def validate_nmrMesa(value):
         try:
-            tam = len(Comanda.objects.exclude(nmrMesa__lt=value).exclude(nmrMesa__gt=value).values())
+            tam = len(Comanda.objects.exclude(nmrMesa__lt=value).exclude(nmrMesa__gt=value).filter(encerrada=False).values())
         except:
             a = 1
         else:
