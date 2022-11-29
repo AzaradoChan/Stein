@@ -130,6 +130,7 @@ class ComandaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         dados = request.data
+        print(dados)
         produtos = [{
             'id':'2',
             'quantidade':'5'
