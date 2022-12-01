@@ -1,12 +1,13 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
-
+import datetime
 from braces.views import GroupRequiredMixin, StaffuserRequiredMixin
 
 gAdm = [u'Gerência']
 gCAdministrativo = [u'Administração'] + gAdm
 
 from .models import TipoProduto, Produto
+from mesas.models import Comanda_Produto
 
 from django.urls import reverse_lazy
 
@@ -61,7 +62,53 @@ class ProdutoList(ListView):
         else:
             qSet = Produto.objects.filter(vendendo=True)
         tProdutos = TipoProduto.objects.all()
-        return qSet, tProdutos
+
+        data30Dias = datetime.timedelta(days=30)
+        dataHoje = datetime.datetime.today()
+        prodPedidos = Comanda_Produto.objects.filter(horaPedido__gt=dataHoje-data30Dias)
+        produtos = Produto.objects.filter(vendendo=True)
+
+        controle = []
+        listaQTDProdutos = []
+        for pedido in prodPedidos:
+            if pedido.produto.id not in controle:
+                controle.append(pedido.produto.id)
+                p ={
+                    'produto': pedido.produto,
+                    'quantidade': int(pedido.quantidade)
+                }
+                listaQTDProdutos.append(p.copy())
+                p.clear()
+            else:
+                for item in listaQTDProdutos:
+                    if item['produto'] == pedido.produto:
+                        item['quantidade'] += int(pedido.quantidade)
+        
+        for prod in produtos:
+            if prod.id not in controle:
+                p = {
+                    'produto': prod,
+                    'quantidade': 0
+                }
+
+                listaQTDProdutos.append(p.copy())
+                p.clear()
+
+        cont = {}
+        listaProdutos = sorted(listaQTDProdutos, key=lambda x: x['quantidade'], reverse=True)
+        if len(listaProdutos) <= 10:
+            cont['prodMPedidos'] = listaProdutos
+        else:
+            cont['prodMPedidos'] = listaProdutos[0:10]
+
+        listaProdutos = sorted(listaQTDProdutos, key=lambda x: x['quantidade'], reverse=False)
+        if len(listaProdutos) <= 10:
+            cont['prodMenosPedidos'] = listaProdutos
+        else:
+            cont['prodMenosPedidos'] = listaProdutos[0:10]
+
+
+        return qSet, tProdutos, cont
 
 
 
