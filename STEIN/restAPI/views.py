@@ -130,7 +130,7 @@ class ComandaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         dados = request.data
-        print(dados)
+        print(type(dados['produtos']))
         produtos = [{
             'id':'2',
             'quantidade':'5'
@@ -142,23 +142,24 @@ class ComandaViewSet(viewsets.ModelViewSet):
             'quantidade':'2'
         }]
 
-        comanda = super().create(request, *args, **kwargs)
-        com = Comanda.objects.get(nmrMesa=dados['nmrMesa'], funcionario=dados['funcionario'], encerrada=False)
+        # comanda = super().create(request, *args, **kwargs)
+        # com = Comanda.objects.get(nmrMesa=dados['nmrMesa'], funcionario=dados['funcionario'], encerrada=False)
         
-        mesa = Mesa.objects.get(id=dados['nmrMesa'])
-        mesa.ocupada = True
-        mesa.save()
+        # mesa = Mesa.objects.get(id=dados['nmrMesa'])
+        # mesa.ocupada = True
+        # mesa.save()
 
-        for produto in produtos:
-            if str(produto['quantidade']) != '0':
-                Comanda_Produto.objects.create(
-                    comanda_id=com.id,
-                    produto_id=produto['id'],
-                    quantidade=produto['quantidade']
-                )
+        # for produto in dados['produtos']:
+        #     print(produto)
+            # if str(produto['quantidade']) != '0':
+                # Comanda_Produto.objects.create(
+                #     comanda_id=com.id,
+                #     produto_id=produto['id'],
+                #     quantidade=produto['quantidade']
+                # )
 
-        AtualizaValTotComanda(com)
-        return(comanda)
+        # AtualizaValTotComanda(com)
+        # return(comanda)
 
 class ComandaProdutoViewSet(viewsets.ModelViewSet):
     queryset = Comanda_Produto.objects.all()

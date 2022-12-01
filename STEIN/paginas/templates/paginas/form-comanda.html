@@ -42,8 +42,7 @@
         }
         if (novoValor <= 0 || ''+novoValor == 'NaN'){
             campoQtd.val('0')
-            $('#total'+produtoPK).html(
-                '<input type="text" hidden name="campoValor" id="valor'+produtoPK+'" value="'+valQtdProd+'">'
+            $('#total'+produtoPK).html(''
             )
             $('#valor'+produtoPK).val('0')
         }else{
@@ -273,6 +272,14 @@
     <div class="container text-center mt-3 mx-auto">
         <div class="row mx-auto">
             <div class="col">
+                <button type="button" class="btn btn-danger"
+                 onclick="history.back();">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                     Cancelar
+                </button>
+            </div>
+
+            <div class="col">
                 {% if request.user.is_anonymous %}
                 <button type="button" data-bs-toggle="modal" data-bs-target="#telaVerificacao" class="btn btn-success">
                     <i class="fa fa-check-circle" aria-hidden="true"></i>
@@ -284,14 +291,6 @@
                      Confirmar
                 </button>
                 {%endif%}
-            </div>
-
-            <div class="col">
-                <button type="button" class="btn btn-danger"
-                 onclick="history.back();">
-                    <i class="fa fa-close" aria-hidden="true"></i>
-                     Cancelar
-                </button>
             </div>
         </div>
     </div>
@@ -446,7 +445,17 @@
                 }
             }
             catch(e){
-                console.log(e)
+                try{
+                    if (funcPK.length){}
+                }catch{
+                    alert('Por favor, selecione o colaborador.')
+                }
+                try{
+                    if (mesaPK == 0){
+                    }
+                }catch{
+                    alert('Por favor, selecione uma mesa!')
+                }
             }
         }else{
             alert('Selecione um produto primeiro!')
@@ -457,6 +466,7 @@
 <script>
     function fazerPedido() {
         mesaPK = $('#mesaPK').val()
+        console.log(mesaPK)
         funcPK = $('#funcionario').val()
         prods = $('input[name=campoValor]')
         produtosPK = []
@@ -466,6 +476,11 @@
             produtosQTD.push($('#qtd'+produtosPK[c]).val())
         }
         if (produtosQTD.length >= 1 && prods.length >= 1){
+            if (mesaPK == null || mesaPK == ''){
+                console.log(mesaPK)
+                    alert('Por favor, selecione uma mesa!')
+                    }
+            else{
             try{
                 if (produtosPK.length >= 1 && produtosQTD.length, funcPK.length, (mesaPK != 0)){
                     observacao = $('textarea[name=observacao]').val()
@@ -483,14 +498,26 @@
                             modelo: '{{modelo}}'
                         },
                         success: function (response) {
-                            window.location.replace('{% url "listar-comanda" %}');
+                            window.location.replace('{% url "index" %}');
                         }
                 }); 
                 }
             }
             catch(e){
-                console.log(e)
+                try{
+                    if (funcPK.length){}
+                }catch{
+                    alert('Por favor, selecione o colaborador.')
+                }
+                try{
+                    if (mesaPK == null){
+                    alert('Por favor, selecione uma mesa!')
+                    }
+                }catch{
+                    alert('Por favor, selecione uma mesa!')
+                }
             }
+        }
         }else{
             alert('Selecione um produto primeiro!')
         }
