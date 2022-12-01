@@ -47,42 +47,6 @@ Tela Inicial
   </div>
 </div>
 
-<div class="accordion accordion-flush mt-2 mb-5" style="border: 2px solid black; border-radius:20px;"
-  id="accordionFlushMenosPedidos">
-  <div class="accordion-item" style="border-radius:105px;">
-    <h4 class="accordion-header" id="flush-MenosPedidos">
-      <button type="button" class="accordion-button collapsed" style="border-radius:105px;"" data-bs-toggle=" collapse"
-        data-bs-target="#flush-collapseMenosVendidos" aria-expanded="false" aria-controls="collapseOne">
-        Menos Pedidos nos Últimos 30 dias
-      </button>
-    </h4>
-    <div id="flush-collapseMenosVendidos" class="accordion-collapse collapse" aria-labeled-by="flush-headingOne"
-      data-bs-parent="accordionFlushMenosPedidos">
-      <div class="accordion-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Lugar</th>
-              <th scope="col">Produto</th>
-              <th scope="col">Quantidade</th>
-            </tr>
-            <tr>
-          </thead>
-          <tbody>
-            {% for pedido in prodMenosPedidos %}
-            {% if forloop.counter <= 10 %} <tr>
-              <th scope="row">{{forloop.counter}}</th>
-              <td>{{pedido.produto.nome}}</td>
-              <td>{{pedido.quantidade}}</td>
-              </tr>
-              {% endif %}
-              {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
 {% endif %}
 <div class="col-md-10 mx-auto">
   <div class="row justify-content-around">
