@@ -1,4 +1,6 @@
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import viewsets, permissions
+
+import django.http as http
 
 import json
 
@@ -134,9 +136,13 @@ class ComandaViewSet(viewsets.ModelViewSet):
         idFuncionario = dados['idFuncionario']
         idFuncionario = str(idFuncionario[63:len(str(idFuncionario))-1])
         produtos = dados['produtos']
-
+        observacao = dados['observacao']
+        
         if len(Mesa.objects.filter(id=idMesa, ocupada=True)) == 0:
-            comanda = Comanda(nmrMesa_id=idMesa, funcionario_id=idFuncionario)
+            if observacao == '':
+                comanda = Comanda(nmrMesa_id=idMesa, funcionario_id=idFuncionario)
+            else:
+                comanda = Comanda(nmrMesa_id=idMesa, funcionario_id=idFuncionario, observacao=observacao)
             comanda.save()
 
             mesa = Mesa.objects.get(id=idMesa)
@@ -151,6 +157,10 @@ class ComandaViewSet(viewsets.ModelViewSet):
                 cp.save()
         elif len(Mesa.objects.filter(id=idMesa, ocupada=True)) != 0:
             comanda = Comanda.objects.get(nmrMesa_id=idMesa, encerrada=False)
+            if not observacao == '':
+                comanda.observacao=observacao
+                comanda.save()
+
             prodPedidos = Comanda_Produto.objects.filter(comanda_id=comanda.pk)
             for produto in produtos:
                 for pproduto in prodPedidos:
@@ -167,11 +177,9 @@ class ComandaViewSet(viewsets.ModelViewSet):
                             quantidade=produto['quantidade']
                         )
                         cp.save()
-                        
-            print(comanda)
 
-
-            AtualizaValTotComanda(comanda)
+        AtualizaValTotComanda(comanda)
+        return http.HttpResponse('Comanda Criada com Sucesso.', 200)
 
 class ComandaProdutoViewSet(viewsets.ModelViewSet):
     queryset = Comanda_Produto.objects.all()

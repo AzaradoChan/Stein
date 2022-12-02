@@ -71,7 +71,6 @@
 <h3>
     {{titulo}}
 </h3>
-<p class="lead">Preencha todos os campos obrigatórios (*).</p>
 
 <hr>
 <div class="row justify-content-around">
@@ -187,16 +186,19 @@
             {% endfor%}
         {% endif %}
                 </select>
-    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false">
-        <div class="row">
+    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false" 
+        data-bs-touch="false">
+        <div class="list-group list-group-horizontal text-nowrap overflow-auto sticky-top" 
+            style="background-color: rgb(230, 230, 230); padding-top: 3px;">
             {% for tipo in object_list.1 %}
                 <button type="button" data-bs-target="#carouselProdutos" 
                         data-bs-slide-to={{forloop.counter|add:'-1'}} 
                         class="col btn btn-sm mb-2 botTipo" 
                         aria-current="true" aria-label="Slide {{forloop.counter}}" 
-                        style="border: 1px solid gray; margin-right: 5px;"
+                        style="border: 1px solid gray; margin-right: 5px; background-color: white;"
                         id="tipo{{tipo.pk}}"
-                        onclick="$('.botTipo').removeClass('btn-primary');$('#tipo{{tipo.pk}}').addClass('btn-primary');">
+                        onclick="$('.botTipo').removeClass('btn-primary').attr('style', 'border: 1px solid gray; margin-right: 5px; background-color: white;');
+                        $('#tipo{{tipo.pk}}').addClass('btn-primary').attr('style', 'border: 1px solid gray; margin-right: 5px; background-color: blue;');">
                         {{tipo.tipo}}
                 </button>
             {% endfor %}
