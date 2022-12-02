@@ -239,6 +239,7 @@ class ComandaDelete(GroupRequiredMixin, StaffuserRequiredMixin, DeleteView):
         if self.get_object().encerrada == False:
             mesa = Mesa.objects.get(id=self.get_object().nmrMesa_id)
             mesa.ocupada = False
+            mesa.garcom = False
             mesa.save()
 
         resp = super().post(request, *args, **kwargs)
@@ -378,6 +379,7 @@ def atualizarValorPagoComanda(request):
             comanda.encerrada = True
             mesa = Mesa.objects.get(pk=comanda.nmrMesa_id)
             mesa.ocupada = False
+            mesa.garcom = False
             mesa.save()
         comanda.save()
 
