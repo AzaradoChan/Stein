@@ -183,7 +183,7 @@ class ComandaList(GroupRequiredMixin, ListView):
         return comandas, listaPedidos
 
 
-class ComandaSimplesList(GroupRequiredMixin, ListView):
+class ComandaSimplesList(GroupRequiredMixin, StaffuserRequiredMixin, ListView):
     login_url = reverse_lazy('entrar')
     group_required = gruposComanda + gCAdministrativo
     template_name = 'paginas/listas/comanda-Simples.html'

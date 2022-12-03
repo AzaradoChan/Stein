@@ -22,7 +22,6 @@ Lista de Produtos
             {% endif %}
         </tr>
     </table>
-    
     {% if perms.equipe.view_funcionario %}
     <div class="accordion accordion-flush mb-2" style="border: 2px solid black; border-radius:20px;"
     id="accordionFlushMenosPedidos">
@@ -103,8 +102,6 @@ Lista de Produtos
                                     <h3>{{produto.nome}}</h3>
                                     {% if produto.descricao %}
                                         {{produto.descricao}}
-                                    {% else %}
-                                        O produto não possui descrição.
                                     {% endif %}
                                     <br>
                                     R${{produto.preco}} cada
@@ -114,7 +111,7 @@ Lista de Produtos
                                         <div class="col-sm-1">
                                         </div>
                                         <div class="col">
-                                            {% if perms.estoque.change_produto %}
+                                            {% if request.user.is_staff %}
                                             <a href="{% url 'edit-produto' produto.pk %}">
                                                 <button type="button" class="btn btn-primary btn-lg" >
                                                     <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -130,7 +127,7 @@ Lista de Produtos
                                         <div class="col-sm-1">
                                         </div>
                                         <div class="col">
-                                            {% if perms.estoque.delete_produto %}
+                                            {% if request.user.is_staff %}
                                             <a href="{% url 'del-produto' produto.pk %}">
                                                 <button type="button" class="btn btn-danger btn-lg">
                                                     <i class="fa fa-close" aria-hidden="true"></i>

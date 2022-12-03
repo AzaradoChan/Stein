@@ -17,8 +17,13 @@ Tela Inicial
       <img src="{% static 'img/garcomPedidos.jpg' %}" class="card-img-top mt-2" alt="...">
       <div class="card-body">
         <h5 class="card-title">Verificar Comandas</h5>
+        {% if request.user.is_staff %}
         <p class="card-text">Listagem de comandas abertas e/ou fechadas.</p>
         <a href="{% url 'listar-comanda' %}" class="btn btn-primary">Olhar</a>
+        {% else %}
+        <p class="card-text">Menu de mesas para a criação de comandas.</p>
+        <a href="{% url 'gerencia-comanda' %}" class="btn btn-primary">Olhar</a>
+        {% endif %}
       </div>
     </div>
     {%endif%}
