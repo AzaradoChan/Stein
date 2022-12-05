@@ -115,7 +115,8 @@
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBkdLabel{{comanda.comanda.id}}">Selecione a quantidade
                             dos produtos entregues.</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                        aria-label="Close" onclick="atualizaCheckAtualizar('true')"></button>
                     </div>
                     <div class="modal-body">
                         {% for produto in comanda.produtos %}
@@ -155,7 +156,8 @@
                     <div class="modal-footer">
                         <div class="row">
                             <div class="col">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+                                <button type="button" class="btn btn-secondary" 
+                                onclick="atualizaCheckAtualizar('true');" data-bs-dismiss="modal">Fechar</button>
                             </div>
                             <div class="col">
                                 <button type="button" onclick="Entregar('{{comanda.comanda.pk}}') "

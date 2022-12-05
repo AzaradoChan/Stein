@@ -12,7 +12,7 @@ Tela Inicial
 
 <div class="col-md-10 mx-auto">
   <div class="row justify-content-around">
-    {% if perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
+    {% if request.user.is_staff or request.user.is_superuser %}
     <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
       <img src="{% static 'img/garcomPedidos.jpg' %}" class="card-img-top mt-2" alt="...">
       <div class="card-body">

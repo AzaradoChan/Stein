@@ -62,8 +62,10 @@ Lista de Produtos
     </div>
     {% endif %}
 
-    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false">
-        <div class="row">
+    <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false"
+        data-bs-touch="false">
+        <div class="list-group list-group-horizontal text-nowrap overflow-auto sticky-top" 
+            style="background-color: rgb(255, 254, 220); padding-top: 3px;">
             {% for tipo in object_list.1 %}
                 <button type="button" data-bs-target="#carouselProdutos" 
                         data-bs-slide-to={{forloop.counter|add:'-1'}} 
@@ -90,16 +92,16 @@ Lista de Produtos
                 {%endif%}
                         {% for produto in object_list.0 %}
                             {% if produto.tipoProduto == tipo %}
-                            <div class="row mb-2 align-items-center d-flex" id="card{{produto.pk}}"
+                            <div class="row mb-2 align-items-center" id="card{{produto.pk}}"
                                  style="margin-left: 2%; margin-right: 2%; border: 5px solid {% if produto.vendendo %} green {% else %} red {% endif %}; border-radius: 25px;" >
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     {% if produto.imagem %}
                                         <img src="{{produto.imagem.url}}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
                                     {% else %}
                                         <img src="{% static 'img/semIMG.png' %}" class="mb-1 mt-1 mx-auto" width="150px" style="border: 5px; border-radius: 15px;">
                                     {% endif %}
                                 </div>
-                                <div class="col mt-1">
+                                <div class="col-sm-5">
                                     <h3>{{produto.nome}}</h3>
                                     {% if produto.descricao %}
                                         {{produto.descricao}}
@@ -109,10 +111,8 @@ Lista de Produtos
                                     <br>
                                     R${{produto.preco}} cada
                                 </div>
-                                <div class="col-sm-2 mb-2" style="margin-right: 2%;">
+                                <div class="col mb-2">
                                     <div class="row mb-4 mt-3">
-                                        <div class="col-sm-1">
-                                        </div>
                                         <div class="col">
                                             {% if perms.estoque.change_produto %}
                                             <a href="{% url 'edit-produto' produto.pk %}">
@@ -123,12 +123,8 @@ Lista de Produtos
                                             </a>
                                             {% endif %}
                                         </div>
-                                        <div class="col-sm-1">
-                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-1">
-                                        </div>
                                         <div class="col">
                                             {% if perms.estoque.delete_produto %}
                                             <a href="{% url 'del-produto' produto.pk %}">
@@ -138,8 +134,6 @@ Lista de Produtos
                                                 </button>
                                             </a>
                                             {% endif %}
-                                        </div>
-                                        <div class="col-sm-1">
                                         </div>
                                     </div>
                                 </div>                                    
