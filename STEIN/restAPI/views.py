@@ -122,7 +122,7 @@ class ComandaViewSet(viewsets.ModelViewSet):
             if encerrada is not None and idMesa is None:
                 return Comanda.objects.filter(encerrada=encerrada)
             elif encerrada is None and idMesa is not None:
-                return Comanda.objects.filter(nmrMesa=idMesa)
+                return Comanda.objects.filter(nmrMesa=idMesa, encerrada=False)
             elif encerrada is not None and idMesa is not None:
                 return Comanda.objects.filter(encerrada=encerrada, nmrMesa=idMesa)
             else:
@@ -132,54 +132,61 @@ class ComandaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         dados = request.data
+        metodo = dados['metodo']
         idMesa = dados['idMesa']
         idFuncionario = dados['idFuncionario']
-        idFuncionario = str(idFuncionario[63:len(str(idFuncionario))-1])
+        idFuncionario = (idFuncionario[idFuncionario.index('Funcionarios/')+len('Funcionarios/'):len(idFuncionario)-1])
         produtos = dados['produtos']
         observacao = dados['observacao']
-        
-        if len(Mesa.objects.filter(id=idMesa, ocupada=True)) == 0:
-            if observacao == '':
+        if metodo == 'POST':
+            if len(Mesa.objects.filter(id=idMesa, ocupada=True)) == 0:
                 comanda = Comanda(nmrMesa_id=idMesa, funcionario_id=idFuncionario)
-            else:
-                comanda = Comanda(nmrMesa_id=idMesa, funcionario_id=idFuncionario, observacao=observacao)
-            comanda.save()
-
-            mesa = Mesa.objects.get(id=idMesa)
-            mesa.ocupada = True 
-            mesa.save()
-            for produto in produtos:
-                cp = Comanda_Produto(
-                    comanda_id=comanda.pk,
-                    produto_id=produto['idProduto'],
-                    quantidade=produto['quantidade']
-                )
-                cp.save()
-        elif len(Mesa.objects.filter(id=idMesa, ocupada=True)) != 0:
-            comanda = Comanda.objects.get(nmrMesa_id=idMesa, encerrada=False)
-            if not observacao == '':
-                comanda.observacao=observacao
+                if observacao != '':
+                    comanda.observacao = observacao
                 comanda.save()
 
-            prodPedidos = Comanda_Produto.objects.filter(comanda_id=comanda.pk)
-            for produto in produtos:
-                for pproduto in prodPedidos:
-                    if str(pproduto.produto.id) == produto['idProduto']:
-                        if int(pproduto.quantidade) < produto['quantidade']:
-                            pproduto.quantidade = produto['quantidade']
-                        elif int(pproduto.quantidade) > produto['quantidade'] and int(pproduto.quantidadeEntregue) > produto['quantidade']:
-                            pass
-                        pproduto.save()
-                    else:
+                mesa = Mesa.objects.get(id=idMesa)
+                mesa.ocupada = True 
+                mesa.save()
+                for produto in produtos:
+                    if str(produto['quantidade']) != '0':
                         cp = Comanda_Produto(
                             comanda_id=comanda.pk,
                             produto_id=produto['idProduto'],
                             quantidade=produto['quantidade']
                         )
                         cp.save()
+            AtualizaValTotComanda(comanda)
+            return http.HttpResponse('Comanda Criada com Sucesso.', 200)
 
-        AtualizaValTotComanda(comanda)
-        return http.HttpResponse('Comanda Criada com Sucesso.', 200)
+        elif metodo == 'PUT':
+            comanda = Comanda.objects.get(nmrMesa_id=idMesa, encerrada=False)
+            prodPedidos = Comanda_Produto.objects.filter(comanda_id=comanda.pk)
+            listaProdP = []
+
+
+            for pP in prodPedidos:
+                listaProdP.append(str(pP.produto.pk))
+            for p in produtos:
+                if str(p['idProduto']) in listaProdP:
+                    if not (str(p['quantidade']) < str(prodPedidos[listaProdP.index(str(p['idProduto']))].quantidadeEntregue)):
+                        prodPedidos[listaProdP.index(str(p['idProduto']))].quantidade = p['quantidade']
+                        prodPedidos[listaProdP.index(str(p['idProduto']))].save()
+                else:
+                    cp = Comanda_Produto(
+                        comanda_id=comanda.pk,
+                        produto_id=p['idProduto'],
+                        quantidade=p['quantidade']
+                    )
+                    cp.save()
+
+            if observacao != '':
+                comanda.observacao = observacao
+                comanda.save()
+            AtualizaValTotComanda(comanda)
+            return http.HttpResponse()
+
+
 
 class ComandaProdutoViewSet(viewsets.ModelViewSet):
     queryset = Comanda_Produto.objects.all()
