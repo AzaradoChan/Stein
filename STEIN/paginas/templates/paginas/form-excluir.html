@@ -21,7 +21,7 @@
     <p>
         Registro: 
         <br>
-        <h3 class="text-break"><b>{{ object }}</b></h3>
+        <h3 class="text-break"><b>{{ object }}</b></h3>        
     </p>
 
     {% csrf_token %}
@@ -31,7 +31,11 @@
     <br>
     <p class="text-danger">
         <i class="fa fa-warning" aria-hidden="true"></i>
-        Atenção, esta ação não pode ser desfeita.
+        {% if not object.tipoProduto%}
+        Atenção, esta ação não pode ser desfeita. 
+        {%else%}
+        Atenção, caso o produto esteja em uma comanda não será possível excluir o produto, ao invés disso, desmarque a opção 'Vendendo' no menu editar.
+        {%endif%}
         <i class="fa fa-warning" aria-hidden="true"></i>
     </p>
 

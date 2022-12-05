@@ -23,7 +23,7 @@ Lista dos TIpos de Produtos
     </table>
     {% for obj in object_list %}
         <div class="accordion accordion-flush " id="accordionFlush{{obj.pk}}">
-            <div class="accordion-item">
+            <div class="accordion-item mb-2" style="background-color: white; border-left: 2px solid black; border-right: 2px solid black;">
                 <h2 class="accordion-header" id="flush-heading{{obj.pk}}">
                     <button class="accordion-button collapsed"
                     type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{obj.pk}}"

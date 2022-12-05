@@ -20,15 +20,15 @@ Demitir Funcionário
 
     <div class="container row">
         <div class="text-start col">
-            <button type="submit" class="btn btn-danger">
-                Sim
-            </button>
+            <a class="btn btn-danger" href="{% url 'listar-funcionario' %}">
+                Não
+            </a>
         </div>
 
         <div class="text-end col">
-            <a class="btn btn-success" href="{% url 'listar-funcionario' %}">
-                Não
-            </a>
+            <button type="submit" class="btn btn-success">
+                Sim
+            </button>
         </div>
     </div>
 </form>

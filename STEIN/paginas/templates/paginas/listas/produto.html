@@ -64,13 +64,13 @@ Lista de Produtos
     <div id="carouselProdutos" class="carousel slide user-select-none" data-bs-interval="false"
         data-bs-touch="false">
         <div class="list-group list-group-horizontal text-nowrap overflow-auto sticky-top" 
-            style="background-color: rgb(255, 254, 220); padding-top: 3px;">
+            style=" background-color: white;;padding-top: 3px;">
             {% for tipo in object_list.1 %}
                 <button type="button" data-bs-target="#carouselProdutos" 
                         data-bs-slide-to={{forloop.counter|add:'-1'}} 
                         class="col btn btn-sm mb-2 botTipo" 
                         aria-current="true" aria-label="Slide {{forloop.counter}}" 
-                        style="border: 1px solid gray; margin-right: 5px;"
+                        style="border: 1px solid gray; margin-right: 5px; {%if forloop.counter == 1 %} background-color:blue !important; color:white !important; {%endif%}"
                         id="tipo{{tipo.pk}}">
                         {{tipo.tipo}}
                 </button>
