@@ -195,7 +195,7 @@
                         data-bs-slide-to={{forloop.counter|add:'-1'}} 
                         class="col btn btn-sm mb-2 botTipo" 
                         aria-current="true" aria-label="Slide {{forloop.counter}}" 
-                        style="border: 1px solid gray; margin-right: 5px; background-color: white;"
+                        style="border: 1px solid gray; margin-right: 5px; background-color: white; {%if forloop.counter == 1 %} background-color:blue !important; color:white !important; {%endif%}"
                         id="tipo{{tipo.pk}}"
                         onclick="$('.botTipo').removeClass('btn-primary').attr('style', 'border: 1px solid gray; margin-right: 5px; background-color: white;');
                         $('#tipo{{tipo.pk}}').addClass('btn-primary').attr('style', 'border: 1px solid gray; margin-right: 5px; background-color: blue;');">

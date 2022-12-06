@@ -143,7 +143,7 @@ def chamarGarcom(request):
         return http.HttpResponseForbidden()
 
 
-class ComandaList(GroupRequiredMixin, ListView):
+class ComandaList(GroupRequiredMixin, StaffuserRequiredMixin, ListView):
     login_url = reverse_lazy('entrar')
     group_required =  gCAdministrativo + gViewCom
     model = Comanda
@@ -183,7 +183,7 @@ class ComandaList(GroupRequiredMixin, ListView):
         return comandas, listaPedidos
 
 
-class ComandaSimplesList(GroupRequiredMixin, StaffuserRequiredMixin, ListView):
+class ComandaSimplesList(GroupRequiredMixin, ListView):
     login_url = reverse_lazy('entrar')
     group_required = gruposComanda + gCAdministrativo
     template_name = 'paginas/listas/comanda-Simples.html'

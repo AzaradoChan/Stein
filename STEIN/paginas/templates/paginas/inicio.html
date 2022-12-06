@@ -12,44 +12,52 @@ Tela Inicial
 
 <div class="col-md-10 mx-auto">
   <div class="row justify-content-around">
-    {% if request.user.is_staff or request.user.is_superuser %}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-      <img src="{% static 'img/garcomPedidos.jpg' %}" class="card-img-top mt-2" alt="...">
+    {% if request.user.is_staff or request.user.is_superuser or perms.mesas.add_comanda%}
+    <div class="btn btn-outlined-secondary card mb-2" style="width: 17rem; margin-right: 10px;" 
+    onmouseenter="this.style = 'width: 17rem; margin-right: 10px;background-color: lightgray !important;'" 
+    onmouseleave="this.style = 'width: 17rem; margin-right: 10px;background-color: white !important; color: black !important;'"
+    onclick="{%if request.user.is_staff or reqest.user.is_superuser%}window.location.assign('{% url "listar-comanda" %}'){%else%}window.location.assign('{% url "gerencia-comanda" %}'){%endif%} ">
+      <img src="{% static 'img/garcomPedidos.jpg' %}" class="card-img-top mt-2" alt="..." style="max-height: 150px;"
+      style="max-width: 250px;">
       <div class="card-body">
         <h5 class="card-title">Verificar Comandas</h5>
         {% if request.user.is_staff %}
         <p class="card-text">Listagem de comandas abertas e/ou fechadas.</p>
-        <a href="{% url 'listar-comanda' %}" class="btn btn-primary">Olhar</a>
         {% else %}
         <p class="card-text">Menu de mesas para a criação de comandas.</p>
-        <a href="{% url 'gerencia-comanda' %}" class="btn btn-primary">Olhar</a>
         {% endif %}
       </div>
     </div>
     {%endif%}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-      <img src="{% static 'img/cardapio.jpg' %}" class="card-img-top mt-2" alt="Homem segurando um cardápio">
+    <div class="btn btn-outlined-secondary card mb-2" style="width: 17rem; margin-right: 10px;" 
+    onmouseenter="this.style = 'width: 17rem; margin-right: 10px;background-color: lightgray !important;'" 
+    onmouseleave="this.style = 'width: 17rem; margin-right: 10px;background-color: white !important; color: black !important;'"
+    onclick="window.location.assign('{% url "listar-produto" %}')">
+      <img src="{% static 'img/cardapio.jpg' %}" class="card-img-top mt-2 mx-auto" alt="Homem segurando um cardápio" 
+      style="max-width: 250px;">
       <div class="card-body">
         <h5 class="card-title">Menu</h5>
         <p class="card-text">Aqui você pode olhar todos os produtos que temos no cardápio!</p>
-        <a href="{% url 'listar-produto' %}" class="btn btn-primary">Olhar</a>
       </div>
     </div>
     {% if not request.user.is_anonymous %}
     {% if perms.mesas.add_comanda or request.user.is_staff or request.user.is_superuser %}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+    <div class="btn btn-outlined-secondary card mb-2" style="width: 17rem; margin-right: 10px;" 
+    onmouseenter="this.style = 'width: 17rem; margin-right: 10px;background-color: lightgray !important;'" 
+    onmouseleave="this.style = 'width: 17rem; margin-right: 10px;background-color: white !important; color: black !important;'"
+    onclick="window.location.assign('{% url "cad-comanda" %}')">
       <img src="{% static 'img/fazerPedido.jpg' %}" class="card-img-top mt-2"
         alt="Pessoa com uma caneta na mão anotando em um caderno.">
       <div class="card-body">
         <h5 class="card-title">Fazer Pedido</h5>
         <p class="card-text"> Criado para que a linha de frente crie as comandas dos clientes. </p>
-        <a href="{% url 'cad-comanda' %}" class="btn btn-primary">Pedir</a>
       </div>
     </div>
     {% endif %}
     {% else %}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
-      <img src="{% static 'img/pedido.jpg' %}" class="card-img-top mt-2" alt="Homem segurando uma comanda">
+    <div class="text-center card mb-2" style="width: 17rem; margin-right: 10px;">
+      <img src="{% static 'img/pedido.jpg' %}" class="card-img-top mt-2" alt="Homem segurando uma comanda" 
+      style="max-width: 250px;">
       <div class="card-body">
         <h5 class="card-title">Pedido</h5>
         <p class="card-text">Aqui você pode olhar e alterar seu pedido.</p>
@@ -83,26 +91,32 @@ Tela Inicial
     </div>
     {% endif %}
     {% if perms.equipe.view_funcionario or request.user.is_staff or request.user.is_superuser %}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+    <div class="btn btn-outlined-secondary card mb-2" style="width: 17rem; margin-right: 10px;" 
+    onmouseenter="this.style = 'width: 17rem; margin-right: 10px;background-color: lightgray !important;'" 
+    onmouseleave="this.style = 'width: 17rem; margin-right: 10px;background-color: white !important; color: black !important;'"
+    onclick="window.location.assign('{% url "listar-funcionario" %}')">
       <img src="{% static 'img/equipe.png' %}" class="card-img-top mt-2"
-        alt="desenhos de pessoas umas ao lado das outras.">
+        alt="desenhos de pessoas umas ao lado das outras."
+        style="max-width: 250px;">
       <div class="card-body">
         <h5 class="card-title">Gerenciar Equipe</h5>
         <p class="card-text">Gerenciamento de todos os colaboradores que trabalham, ou já trabalharam, no restaurante.
         </p>
-        <a href="{% url 'listar-funcionario' %}" class="btn btn-primary">Gerenciar</a>
       </div>
     </div>
     {%endif%}
 
     {% if perms.mesas.view_comanda or request.user.is_staff or request.user.is_superuser %}
-    <div class="card mb-2" style="width: 18rem; margin-right: 10px;">
+    <div class="btn btn-outlined-secondary card mb-2" style="width: 17rem; margin-right: 10px;" 
+    onmouseenter="this.style = 'width: 17rem; margin-right: 10px;background-color: lightgray !important;'" 
+    onmouseleave="this.style = 'width: 17rem; margin-right: 10px;background-color: white !important; color: black !important;'"
+    onclick="window.location.assign('{% url "listar-retaguarda" %}')">
       <img src="{% static 'img/retaguarda.jpeg' %}" class="card-img-top mt-2"
-        alt="desenhos de pessoas umas ao lado das outras.">
+        alt="desenhos de pessoas umas ao lado das outras."
+        style="max-width: 250px;">
       <div class="card-body">
         <h5 class="card-title">Comandas da Cozinha</h5>
         <p class="card-text">Exibição das comandas próprias para a retaguarda.</p>
-        <a href="{% url 'listar-retaguarda' %}" class="btn btn-primary">Olhar</a>
       </div>
     </div>
     {%endif%}

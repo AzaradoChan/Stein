@@ -23,7 +23,7 @@ Lista de Cargos - {{page_obj.number}}
     </table>
     <form action="?" method="GET">
         <div class="row">
-            <div class="col text-end">
+            <div class="col text-start">
                 <label for="sect">Selecione o Setor:</label>
                 <select id="sect" name="filtro" value="{{ request.GET.filtro }}" placeholder="Setor">
                     {% for obj in object_list.1 %}
@@ -35,10 +35,10 @@ Lista de Cargos - {{page_obj.number}}
                     {% endfor %}
                 </select>
             </div>
-            <div class="col text-start">
-                <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+            <div class="col text-end">
+                <button type="submit" class="btn btn-primary">Buscar</button>
             
-                <a href="{% url 'listar-cargo' %}" class="btn btn-secondary btn-sm">Limpar</a>
+                <a href="{% url 'listar-cargo' %}" class="btn btn-secondary">Limpar</a>
             </div>
         </div>
     </form>
